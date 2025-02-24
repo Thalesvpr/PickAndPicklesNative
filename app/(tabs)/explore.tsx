@@ -1,96 +1,71 @@
-import { StyleSheet, Image, Platform } from 'react-native';
+// screens/HomeScreen.tsx
+import React, { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons"; // Biblioteca de ícones
+import { Switch } from "@/components/widgets/Switch"; // Importe o componente Switch
+import { useManualTheme } from "@/contexts/ManualThemeContext"; // Importe o hook useManualTheme
+import { useThemeColor } from "@/hooks/useThemeColor"; // Importe o hook useThemeColor
+import GroceriesListCard from "@/components/GroceriesListCard";
+import Divider from "@/components/widgets/Divider";
 
-import { Collapsible } from '@/components/widgets/Collapsible';
-import ParallaxScrollView from '@/components/widgets/ParallaxScrollView';
-import { ThemedText } from '@/components/widgets/ThemedText';
-import { ThemedView } from '@/components/widgets/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+export default function ListScreen() {
+  const { manualTheme, setManualTheme } = useManualTheme();
+  const [isSwitchOn, setIsSwitchOn] = useState(manualTheme !== "dark");
+  const handleSwitchToggle = (value: boolean) => {
+    const newTheme = value ? "dark" : "light";
+    setIsSwitchOn(value);
+    setManualTheme(newTheme); // Alterna o tema manualmente
+    console.log("Tema manual:", newTheme);
+  };
 
-export default function TabTwoScreen() {
+  // Usa o useThemeColor para obter as cores do tema atual
+  const backgroundColor = useThemeColor({}, "surface");
+  const textColor = useThemeColor({}, "onSurface");
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <View style={[styles.container, { backgroundColor }]}>
+      <Text style={[styles.text, { color: textColor }]}>
+        O Tema atual é: {manualTheme === "light" ? "Claro" : "Escuro"}
+      </Text>
+      <Divider />
+
+      {/* Usando o Switch para alternar o tema */}
+      <Switch
+        value={isSwitchOn}
+        onValueChange={handleSwitchToggle}
+        themeColor={"tertiary"}
+        size="large" // Tamanho grande
+        iconOn={<MaterialIcons name="dark-mode" size={16} color="#FFF" />} // Ícone quando ligado
+        iconOff={<MaterialIcons name="light-mode" size={16} color="#FFF" />} // Ícone quando desligado
+      />
+      <GroceriesListCard
+        listName="Compras do Mês"
+        icon="Abobora"
+        itemCount={100}
+        supportingText="Itens essenciais para o mês"
+        onAddItem={() => console.log("Compras do Mês")}
+      />
+      <GroceriesListCard
+        listName="Compras do Mês"
+        icon="Desenfetante"
+        itemCount={0}
+        supportingText="Itens essenciais para o mês"
+        onAddItem={() => console.log("Compras do Mês")}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
+  text: {
+    fontSize: 18,
+    marginBottom: 20,
+    fontWeight: "bold",
   },
 });
