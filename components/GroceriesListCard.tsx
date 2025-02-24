@@ -8,6 +8,7 @@ import { ThemedText } from "./widgets/ThemedText";
 import { GroceriesIconSet } from "./GroceriesIconSet";
 import { router } from "expo-router";
 import { tkn } from "@/constants/Theme";
+import { Texts } from "./widgets/Texts";
 
 interface GroceriesListCardProps {
   listName: string;
@@ -43,10 +44,10 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
         ]}
       >
         <View>
-          <ThemedText style={styles.listName}>{listName}</ThemedText>
-          <ThemedText style={styles.supportingText}>
+          <Texts.Headline>{listName}</Texts.Headline>
+          <Texts.SupportingText>
             {supportingText}
-          </ThemedText>
+          </Texts.SupportingText>
         </View>
         <ListCount count={itemCount} />
       </View>
@@ -73,24 +74,13 @@ const styles = StyleSheet.create({
     maxWidth: 380,
     height: 200,
     alignItems: "flex-start",
-    borderRadius: 8,
-    padding: 16,
+    borderRadius: tkn.br.md,
+    padding: tkn.pm.md,
     justifyContent: "space-between",
-  },
-
-  listName: {
-    fontSize: 20,
-    fontWeight: 600,
-    marginBottom: tkn.sz.md,
-  },
-  supportingText: {
-    fontSize: 14,
-    color: "#888",
-    marginBottom: 16,
   },
   actions: {
     flexDirection: "row",
-    gap: 10,
+    gap: tkn.gp.md,
   },
   icon: {
     position: "absolute",

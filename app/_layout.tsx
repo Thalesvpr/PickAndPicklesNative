@@ -13,12 +13,16 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ManualThemeProvider } from "@/contexts/ManualThemeContext";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { Colors } from "@/constants/Colors";
+import { Header } from "@/components/ui/Header";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme(); // Tema do sistema
+  const isDarkTheme = colorScheme === "dark"
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -32,10 +36,9 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
   return (
     <ManualThemeProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={isDarkTheme ? DarkTheme : DefaultTheme}>
         <Stack>
           {/* Tela inicial (tabs) */}
           <Stack.Screen
@@ -47,11 +50,12 @@ export default function RootLayout() {
           <Stack.Screen
             name="cart"
             options={{
-              title: "Carrinho", // Título da tela
-              headerStyle: {
-                backgroundColor: colorScheme === "dark" ? "#000" : "#FFF", // Cor de fundo do cabeçalho
-              },
-              headerTintColor: colorScheme === "dark" ? "#FFF" : "#000", // Cor do texto do cabeçalho
+              header: ({ navigation }) => (
+                <Header
+                  title="Carrinho"
+                  navigation={navigation}
+                />
+              ),
             }}
           />
 

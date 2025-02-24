@@ -12,7 +12,7 @@ import {
 export type ThemedTextProps = TextProps & {
   backwardsColor?: BaseColors | ContainerColors | "surface";
   fontSize?: number;
-  fontWeight?: TextStyle["fontWeight"]; // Tipo correto para fontWeight
+  fontWeight?: string; // Tipo correto para fontWeight
   lineHeight?: number;
   style?: TextProps["style"];
 };
@@ -42,6 +42,7 @@ export function ThemedText({
 
   // Obtém a cor do tema com base na chave determinada
   const color = useThemeColor({}, getColorKey());
+  const weight = fontWeight as TextStyle["fontWeight"]
 
   return (
     <Text
@@ -49,7 +50,7 @@ export function ThemedText({
         { 
           color, // A cor é aplicada dinamicamente
           fontSize,
-          fontWeight, // Agora é do tipo correto
+          fontWeight: weight, // Agora é do tipo correto
           lineHeight,
         },
         style, // Estilos personalizados passados como prop
