@@ -8,7 +8,6 @@ export const Texts = {
       {...props}
       fontSize={tkn.fs.xl} // fontSize 20
       fontWeight={tkn.fw.medium} // fontWeight medium
-      lineHeight={tkn.lh.xxl} // lineHeight 40
     />
   ),
   Subheadline: (props: ThemedTextProps) => (

@@ -16,6 +16,7 @@ import { ManualThemeProvider } from "@/contexts/ManualThemeContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Colors } from "@/constants/Colors";
 import { Header } from "@/components/ui/Header";
+import Button from "@/components/widgets/Button";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -54,6 +55,13 @@ export default function RootLayout() {
                 <Header
                   title="Carrinho"
                   navigation={navigation}
+                  rightActions={
+                   [<Button icon="draw" />,
+                    <Button icon="draw" />,
+                    <Button icon="draw" />,
+                   ]
+                    
+                  }
                 />
               ),
             }}

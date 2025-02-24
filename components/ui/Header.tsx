@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Texts } from '../widgets/Texts';
@@ -9,7 +9,7 @@ interface HeaderProps {
   title: string;
   navigation: any; // Tipo pode ser ajustado conforme necessário
   showBackButton?: boolean;
-  rightActions?: React.ReactNode;
+  rightActions?: React.ReactNode[];
 }
 
 export const Header = ({
@@ -21,19 +21,8 @@ export const Header = ({
   const backgroundColor = useThemeColor({}, "surface"); 
   const iconColor = useThemeColor({}, "onSurface"); 
 
-
-
   return (
-    <View
-      style={{
-        height: 56,
-        backgroundColor,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: tkn.gp.md,
-        paddingHorizontal: tkn.pm.md,
-      }}
-    >
+    <View style={[styles.container, { backgroundColor }]}>
       {/* Botão de voltar */}
       {showBackButton && (
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -45,15 +34,34 @@ export const Header = ({
         </TouchableOpacity>
       )}
 
-      {/* Título */}
-      <Texts.Headline>
+      <Texts.Headline style={styles.title}>
         {title}
       </Texts.Headline>
 
       {/* Ações à direita */}
-      {rightActions && (
-        <View style={{ marginLeft: 'auto' }}>{rightActions}</View>
-      )}
+      {rightActions?.map((action, index) => (
+        <View key={index} style={styles.rightActions}>
+          {action}
+        </View>
+      ))}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: 86,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: tkn.gp.md,
+    paddingHorizontal: tkn.pm.md,
+    paddingVertical: tkn.pm.md,
+  },
+  title: {
+    flex: 1, // Ensure the title takes up the available space
+    marginLeft: tkn.gp.md, // Add some margin if needed
+  },
+  rightActions: {
+    marginLeft: 'auto',
+  },
+});

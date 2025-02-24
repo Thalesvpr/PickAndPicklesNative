@@ -43,7 +43,7 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
           },
         ]}
       >
-        <View>
+        <View style={styles.texts}>
           <Texts.Headline>{listName}</Texts.Headline>
           <Texts.SupportingText>
             {supportingText}
@@ -77,6 +77,9 @@ const styles = StyleSheet.create({
     borderRadius: tkn.br.md,
     padding: tkn.pm.md,
     justifyContent: "space-between",
+  },
+  texts: {
+    gap: 10
   },
   actions: {
     flexDirection: "row",
