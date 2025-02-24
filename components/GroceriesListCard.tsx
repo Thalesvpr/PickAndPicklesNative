@@ -6,6 +6,8 @@ import Button from "./widgets/Button";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedText } from "./widgets/ThemedText";
 import { GroceriesIconSet } from "./GroceriesIconSet";
+import { router } from "expo-router";
+import { tkn } from "@/constants/Theme";
 
 interface GroceriesListCardProps {
   listName: string;
@@ -13,9 +15,11 @@ interface GroceriesListCardProps {
   supportingText: string;
   onAddItem: () => void;
   icon: keyof typeof GroceriesIconSet;
+  id: number
 }
 
 const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
+  id,
   listName,
   itemCount,
   supportingText,
@@ -24,6 +28,9 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
 }) => {
   const backgroundColor = useThemeColor({}, "surfaceContainer");
   const IconComponent = GroceriesIconSet[icon];
+  const handleNavigateToCart = (id: number) => {
+    router.push(`/cart?id=${id}`);
+  };
   return (
     <View style={[styles.card, { backgroundColor: backgroundColor }]}>
       <View
@@ -46,8 +53,8 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
 
       {/* Botão outline com ícone à direita */}
       <View style={styles.actions}>
-        <Button title="Ver Estoque" outline />
-        <Button icon="shopping-cart" badge={1} />
+        <Button title="Ver Estoque" outline  />
+        <Button icon="shopping-cart" badge={1} onPress={() => handleNavigateToCart(id)}/>
       </View>
 
       <View style={styles.icon}>
@@ -74,7 +81,7 @@ const styles = StyleSheet.create({
   listName: {
     fontSize: 20,
     fontWeight: 600,
-    marginBottom: 8,
+    marginBottom: tkn.sz.md,
   },
   supportingText: {
     fontSize: 14,

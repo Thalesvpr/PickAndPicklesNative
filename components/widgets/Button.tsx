@@ -12,6 +12,7 @@ interface ButtonProps {
   icon?: keyof typeof MaterialIcons.glyphMap | string; // Restringe a prop `icon` às chaves válidas do MaterialIcons
   iconPosition?: "left" | "right";
   badge?: number | string; // Prop para o badge
+  onPress?: () => void; // Nova prop para o evento de clique
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   themeColor = "primary",
   iconPosition = "left",
   badge, // Prop para o badge
+  onPress, // Prop para o evento de clique
 }) => {
   const backgroundColor = useThemeColor({}, `${themeColor}Container`);
   const textColor = useThemeColor({}, `${getOnContainerColor(themeColor)}`);
@@ -55,6 +57,7 @@ const Button: React.FC<ButtonProps> = ({
           : { backgroundColor },
         containerOnlyIconStyle, // Aplica o estilo específico para ícone sozinho
       ]}
+      onPress={onPress} // Adiciona o evento de clique
     >
       <View style={styles.content}>
         {icon && iconPosition === "left" && (

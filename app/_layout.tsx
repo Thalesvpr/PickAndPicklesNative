@@ -37,10 +37,28 @@ export default function RootLayout() {
     <ManualThemeProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          {/* Tela inicial (tabs) */}
+          <Stack.Screen
+            name="(tabs)"
+            options={{ headerShown: false }} // Oculta o cabeçalho
+          />
+
+          {/* Tela do Carrinho */}
+          <Stack.Screen
+            name="cart"
+            options={{
+              title: "Carrinho", // Título da tela
+              headerStyle: {
+                backgroundColor: colorScheme === "dark" ? "#000" : "#FFF", // Cor de fundo do cabeçalho
+              },
+              headerTintColor: colorScheme === "dark" ? "#FFF" : "#000", // Cor do texto do cabeçalho
+            }}
+          />
+
+          {/* Tela de "Não Encontrado" */}
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       </ThemeProvider>
     </ManualThemeProvider>
   );

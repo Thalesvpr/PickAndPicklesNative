@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   container: {
     height: 4,
     width: "100%",
-    maxWidth: 380,
     borderRadius: 10,
+    paddingHorizontal: 20,
   },
 });
 

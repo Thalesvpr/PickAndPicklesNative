@@ -1,4 +1,4 @@
-import { Text, type TextProps, StyleSheet } from "react-native";
+import { Text, type TextProps, StyleSheet, type TextStyle } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import {
   Colors,
@@ -10,29 +10,34 @@ import {
 
 // Definindo os tipos de cores
 export type ThemedTextProps = TextProps & {
-  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
-  colorType?: BaseColors | ContainerColors | "surface";
+  backwardsColor?: BaseColors | ContainerColors | "surface";
+  fontSize?: number;
+  fontWeight?: TextStyle["fontWeight"]; // Tipo correto para fontWeight
+  lineHeight?: number;
+  style?: TextProps["style"];
 };
 
 export function ThemedText({
   style,
-  type = "default",
-  colorType = "surface", // Valor padrão é "surface"
+  backwardsColor = "surface",
+  fontSize,
+  fontWeight,
+  lineHeight,
   ...rest
 }: ThemedTextProps) {
   // Função para determinar a cor com base no tipo
   const getColorKey = (): OnColors | "onSurface" | OnContainerColors => {
-    if (colorType === "surface") {
+    if (backwardsColor === "surface") {
       return "onSurface"; // Caso especial para "surface"
     }
 
-    if (colorType.endsWith("Container")) {
+    if (backwardsColor.endsWith("Container")) {
       return `on${capitalizeFirstLetter(
-        colorType.replace("Container", "")
+        backwardsColor.replace("Container", "")
       )}Container` as OnContainerColors;
     }
 
-    return `on${capitalizeFirstLetter(colorType)}` as OnColors;
+    return `on${capitalizeFirstLetter(backwardsColor)}` as OnColors;
   };
 
   // Obtém a cor do tema com base na chave determinada
@@ -41,13 +46,13 @@ export function ThemedText({
   return (
     <Text
       style={[
-        { color }, // A cor é aplicada dinamicamente
-        type === "default" && styles.default,
-        type === "title" && styles.title,
-        type === "defaultSemiBold" && styles.defaultSemiBold,
-        type === "subtitle" && styles.subtitle,
-        type === "link" && styles.link,
-        style,
+        { 
+          color, // A cor é aplicada dinamicamente
+          fontSize,
+          fontWeight, // Agora é do tipo correto
+          lineHeight,
+        },
+        style, // Estilos personalizados passados como prop
       ]}
       {...rest}
     />
@@ -59,28 +64,11 @@ function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Estilos do componente
+// Estilos do componente (adicione estilos personalizados aqui, se necessário)
 const styles = StyleSheet.create({
-  default: {
+  // Exemplo de estilo padrão para o texto
+  defaultText: {
     fontSize: 16,
     lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: "600",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
   },
 });
