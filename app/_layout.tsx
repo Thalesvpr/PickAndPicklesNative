@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import { GestureHandlerRootView } from "react-native-gesture-handler"; // Importe o GestureHandlerRootView
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { ManualThemeProvider } from "@/contexts/ManualThemeContext";
@@ -23,7 +24,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme(); // Tema do sistema
-  const isDarkTheme = colorScheme === "dark"
+  const isDarkTheme = colorScheme === "dark";
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -37,41 +38,42 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+
   return (
-    <ManualThemeProvider>
-      <ThemeProvider value={isDarkTheme ? DarkTheme : DefaultTheme}>
-        <Stack>
-          {/* Tela inicial (tabs) */}
-          <Stack.Screen
-            name="(tabs)"
-            options={{ headerShown: false }} // Oculta o cabeçalho
-          />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ManualThemeProvider>
+        <ThemeProvider value={isDarkTheme ? DarkTheme : DefaultTheme}>
+          <Stack>
+            {/* Tela inicial (tabs) */}
+            <Stack.Screen
+              name="(tabs)"
+              options={{ headerShown: false }} // Oculta o cabeçalho
+            />
 
-          {/* Tela do Carrinho */}
-          <Stack.Screen
-            name="cart"
-            options={{
-              header: ({ navigation }) => (
-                <Header
-                  title="Carrinho"
-                  navigation={navigation}
-                  rightActions={
-                   [<Button icon="draw" />,
-                    <Button icon="draw" />,
-                    <Button icon="draw" />,
-                   ]
-                    
-                  }
-                />
-              ),
-            }}
-          />
+            {/* Tela do Carrinho */}
+            <Stack.Screen
+              name="cart"
+              options={{
+                header: ({ navigation }) => (
+                  <Header
+                    title="Carrinho"
+                    navigation={navigation}
+                    rightActions={[
+                      <Button icon="draw" />,
+                      <Button icon="draw" />,
+                      <Button icon="draw" />,
+                    ]}
+                  />
+                ),
+              }}
+            />
 
-          {/* Tela de "Não Encontrado" */}
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-      </ThemeProvider>
-    </ManualThemeProvider>
+            {/* Tela de "Não Encontrado" */}
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        </ThemeProvider>
+      </ManualThemeProvider>
+    </GestureHandlerRootView>
   );
 }

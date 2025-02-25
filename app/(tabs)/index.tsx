@@ -100,9 +100,11 @@ export default function HomeScreen() {
               id={list.id}
               listName={list.listName}
               icon={list.icon}
+              badgeValue={27}
               itemCount={list.itemCount}
               supportingText={list.supportingText}
               onAddItem={() => console.log(list.listName)}
+              key={list.id}
             />
         ))}
       </ScrollView>

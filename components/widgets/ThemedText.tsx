@@ -45,7 +45,7 @@ export function ThemedText({
   const weight = fontWeight as TextStyle["fontWeight"]
 
   return (
-    <Text
+    <ThemedText
       style={[
         { 
           color, // A cor é aplicada dinamicamente
