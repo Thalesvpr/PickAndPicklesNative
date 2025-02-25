@@ -8,60 +8,17 @@ import GroceriesListCard from "@/components/GroceriesListCard";
 import Divider from "@/components/widgets/Divider";
 import { ScrollView } from "react-native-gesture-handler";
 import { GroceriesIconSet } from "@/components/GroceriesIconSet";
+import { groceriesListsDataSet } from "@/constants/dataset";
 
 interface GList {
-
-  id: number,
-  listName: string,
-  icon: keyof typeof GroceriesIconSet
-  itemCount: number,
-  supportingText: string
+  id: number;
+  listName: string;
+  icon: keyof typeof GroceriesIconSet;
+  itemCount: number;
+  supportingText: string;
 }
 // Dados dos cards
-const groceriesLists: GList[] = [
-  {
-    id: 1,
-    listName: "Compras do Mês",
-    icon: "Abobora",
-    itemCount: 100,
-    supportingText: "Itens essenciais para o mês",
-  },
-  {
-    id: 2,
-    listName: "Compras da Semana",
-    icon: "Limao",
-    itemCount: 0,
-    supportingText: "Itens essenciais para a semana",
-  },
-  {
-    id: 3,
-    listName: "Compras Especiais",
-    icon: "Nabo",
-    itemCount: 0,
-    supportingText: "Itens especiais para ocasiões",
-  },
-  {
-    id: 4,
-    listName: "Compras Especiais",
-    icon: "Brocolis",
-    itemCount: 0,
-    supportingText: "Itens especiais para ocasiões",
-  },
-  {
-    id: 5,
-    listName: "Compras Especiais",
-    icon: "Detergente",
-    itemCount: 0,
-    supportingText: "Itens especiais para ocasiões",
-  },
-  {
-    id: 6,
-    listName: "Compras Especiais",
-    icon: "Balde",
-    itemCount: 0,
-    supportingText: "Itens especiais para ocasiões",
-  },
-];
+const groceriesLists = groceriesListsDataSet;
 
 export default function HomeScreen() {
   const { manualTheme, setManualTheme } = useManualTheme();
@@ -76,7 +33,6 @@ export default function HomeScreen() {
 
   const backgroundColor = useThemeColor({}, "surface");
   const textColor = useThemeColor({}, "onSurface");
-
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
@@ -96,14 +52,16 @@ export default function HomeScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {groceriesLists.map((list) => (
-            <GroceriesListCard
-              id={list.id}
-              listName={list.listName}
-              icon={list.icon}
-              itemCount={list.itemCount}
-              supportingText={list.supportingText}
-              onAddItem={() => console.log(list.listName)}
-            />
+          <GroceriesListCard
+            id={list.id}
+            listName={list.listName}
+            icon={list.icon}
+            badgeValue={270}
+            itemCount={list.items.length}
+            supportingText={list.supportingText}
+            onAddItem={() => console.log(list.listName)}
+            key={list.id}
+          />
         ))}
       </ScrollView>
     </View>

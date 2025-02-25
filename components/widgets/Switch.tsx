@@ -59,12 +59,12 @@ export function Switch({
       Animated.timing(translateX, {
         toValue: newValue ? sizeValues.translation : 0,
         duration: 200,
-        useNativeDriver: true,
+        useNativeDriver: false, // Alterado para false
       }),
       Animated.timing(colorAnimation, {
         toValue: newValue ? 1 : 0,
         duration: 200,
-        useNativeDriver: false,
+        useNativeDriver: false, // Já era false
       }),
     ]).start();
 

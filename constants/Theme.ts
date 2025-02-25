@@ -13,7 +13,7 @@ export const tkn = {
       full: 9999,
     },
     fs: {
-      xs: 12,
+      xs: 10,
       sm: 14,
       md: 16,
       lg: 18,

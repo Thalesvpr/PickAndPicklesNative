@@ -16,7 +16,8 @@ interface GroceriesListCardProps {
   supportingText: string;
   onAddItem: () => void;
   icon: keyof typeof GroceriesIconSet;
-  id: number
+  id: number;
+  badgeValue: number;
 }
 
 const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
@@ -25,6 +26,7 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
   itemCount,
   supportingText,
   onAddItem,
+  badgeValue,
   icon,
 }) => {
   const backgroundColor = useThemeColor({}, "surfaceContainer");
@@ -45,17 +47,19 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
       >
         <View style={styles.texts}>
           <Texts.Headline>{listName}</Texts.Headline>
-          <Texts.SupportingText>
-            {supportingText}
-          </Texts.SupportingText>
+          <Texts.SupportingText>{supportingText}</Texts.SupportingText>
         </View>
         <ListCount count={itemCount} />
       </View>
 
       {/* Botão outline com ícone à direita */}
       <View style={styles.actions}>
-        <Button title="Ver Estoque" outline  />
-        <Button icon="shopping-cart" badge={1} onPress={() => handleNavigateToCart(id)}/>
+        <Button title="Ver Estoque" outline/>
+        <Button
+          icon="shopping-cart"
+          badge={badgeValue}
+          onPress={() => handleNavigateToCart(id)}
+        />
       </View>
 
       <View style={styles.icon}>
@@ -79,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   texts: {
-    gap: 10
+    gap: 10,
   },
   actions: {
     flexDirection: "row",

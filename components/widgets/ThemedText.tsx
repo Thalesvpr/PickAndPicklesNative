@@ -42,12 +42,12 @@ export function ThemedText({
 
   // Obtém a cor do tema com base na chave determinada
   const color = useThemeColor({}, getColorKey());
-  const weight = fontWeight as TextStyle["fontWeight"]
+  const weight = fontWeight as TextStyle["fontWeight"];
 
   return (
     <Text
       style={[
-        { 
+        {
           color, // A cor é aplicada dinamicamente
           fontSize,
           fontWeight: weight, // Agora é do tipo correto

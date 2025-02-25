@@ -30,7 +30,7 @@ export const Texts = {
     <ThemedText
       {...props}
       fontSize={tkn.fs.xs} // fontSize 12
-      fontWeight={tkn.fw.normal} // fontWeight normal
+      fontWeight={tkn.fw.medium} // fontWeight normal
       lineHeight={tkn.lh.xs} // lineHeight 16
     />
   ),

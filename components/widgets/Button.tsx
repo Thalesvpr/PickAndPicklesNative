@@ -4,15 +4,16 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { BaseColors, getOnContainerColor } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Badge from "./Badge";
+import { tkn } from "@/constants/Theme";
 
 interface ButtonProps {
   title?: string;
   themeColor?: BaseColors;
   outline?: boolean;
-  icon?: keyof typeof MaterialIcons.glyphMap | string; // Restringe a prop `icon` às chaves válidas do MaterialIcons
+  icon?: keyof typeof MaterialIcons.glyphMap | string;
   iconPosition?: "left" | "right";
-  badge?: number | string; // Prop para o badge
-  onPress?: () => void; // Nova prop para o evento de clique
+  badge?: number | string;
+  onPress?: () => void;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,8 +22,8 @@ const Button: React.FC<ButtonProps> = ({
   icon,
   themeColor = "primary",
   iconPosition = "left",
-  badge, // Prop para o badge
-  onPress, // Prop para o evento de clique
+  badge,
+  onPress,
 }) => {
   const backgroundColor = useThemeColor({}, `${themeColor}Container`);
   const textColor = useThemeColor({}, `${getOnContainerColor(themeColor)}`);
@@ -30,8 +31,8 @@ const Button: React.FC<ButtonProps> = ({
   const borderVariantColor = useThemeColor({}, "outline");
 
   // Cores do Badge
-  const badgeBackgroundColor = useThemeColor({}, "errorContainer"); // Cor de fundo do Badge
-  const badgeTextColor = useThemeColor({}, "onErrorContainer"); // Cor do texto do Badge
+  const badgeBackgroundColor = useThemeColor({}, "errorContainer");
+  const badgeTextColor = useThemeColor({}, "onErrorContainer");
 
   // Determina a cor do ícone com base no estado do botão
   const contentColor = outline ? borderVariantColor : textColor;
@@ -39,49 +40,38 @@ const Button: React.FC<ButtonProps> = ({
   // Verifica se o botão contém apenas o ícone
   const isIconOnly = !title && icon;
 
-  // Estilo específico para quando o botão contém apenas o ícone
-  const containerOnlyIconStyle = isIconOnly
-    ? {
-        width: 40, // Tamanho fixo para o botão
-        height: 40, // Tamanho fixo para o botão
-        padding: 0, // Remove o padding padrão
-      }
-    : {};
+  // Determina a direção da row com base na posição do ícone
+  const contentDirection = iconPosition === "left" ? "row" : "row-reverse";
 
   return (
     <Pressable
       style={[
-        styles.button,
+        styles.buttonBase,
         outline
           ? { backgroundColor: "transparent", borderColor, borderWidth: 2 }
           : { backgroundColor },
-        containerOnlyIconStyle, // Aplica o estilo específico para ícone sozinho
+        isIconOnly && styles.iconOnlyButton, // Estilo específico para botão com apenas ícone
+        title && !icon && styles.textButton, // Estilo específico para botão com apenas texto
       ]}
-      onPress={onPress} // Adiciona o evento de clique
+      onPress={onPress}
     >
-      <View style={styles.content}>
-        {icon && iconPosition === "left" && (
-          <View style={styles.icon}>
+      <View style={[styles.content, { flexDirection: contentDirection }]}>
+        {icon && (
+          <View style={styles.iconContainer}>
             <MaterialIcons
-              name={icon as keyof typeof MaterialIcons.glyphMap} // Passa o nome do ícone
-              size={20} // Tamanho padrão do ícone
-              color={contentColor} // Cor do ícone baseada no tema
+              name={icon as keyof typeof MaterialIcons.glyphMap}
+              size={20}
+              color={contentColor}
             />
-            {badge && <Badge value={badge} />}
+            {badge && (
+              <Badge
+                value={badge}
+              />
+            )}
           </View>
         )}
         {title && (
           <Text style={[styles.text, { color: contentColor }]}>{title}</Text>
-        )}
-        {icon && iconPosition === "right" && (
-          <View style={styles.icon}>
-            <MaterialIcons
-              name={icon as keyof typeof MaterialIcons.glyphMap} // Passa o nome do ícone
-              size={20} // Tamanho padrão do ícone
-              color={contentColor} // Cor do ícone baseada no tema
-            />
-            {badge && <Badge value={badge} />}
-          </View>
         )}
       </View>
     </Pressable>
@@ -89,12 +79,12 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 8,
-    paddingHorizontal: 25,
+  buttonBase: {
+    height: 40,
     borderRadius: 99,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   content: {
     flexDirection: "row",
@@ -106,8 +96,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
-  icon: {
-    position: "relative", // Permite posicionar o badge corretamente
+  iconContainer: {
+    position: "relative",
+  },
+  iconOnlyButton: {
+    width: 40,
+    padding: 0, // Remove o padding padrão
+  },
+  textButton: {
+    paddingHorizontal: tkn.pm.md, // Ajuste de padding para botão com apenas texto
   },
 });
 
