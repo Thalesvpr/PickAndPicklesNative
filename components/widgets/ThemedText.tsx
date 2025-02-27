@@ -32,7 +32,7 @@ export function ThemedText({
   const color = useThemeColor({}, getForwardsColor(backwardsColor));
 
   return (
-    <Text
+    <ThemedText
       style={[
         styles.defaultText, // Estilo padrão
         {

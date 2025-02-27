@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     gap: Gaps.md,
   },
   icon: {
+  
     position: "absolute",
     right: 0,
     bottom: 0,
