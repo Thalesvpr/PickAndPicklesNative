@@ -1,47 +1,71 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { Platform } from "react-native";
-import { HapticTab } from "@/components/widgets/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
-import TabBarBackground from "@/components/ui/TabBarBackground";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { Platform, View } from "react-native";
+import VerticalButton from "@/components/widgets/VerticalButton";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const backgroundColor = useThemeColor({}, "surface");
+
+  // Cria uma View com a cor do tema para ser usada como tabBarBackground
+  const TabBarBackgroundWithTheme = () => (
+    <View
+      style={{
+        backgroundColor: "green", // Usa a cor do tema
+        justifyContent: "center",
+      }}
+    />
+  );
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].onPrimary,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: "absolute",
-          },
-          default: {},
-        }),
+
+        tabBarButton: (props) => {
+          const title = props.accessibilityLabel || "";
+          const icon = props.accessibilityLabel || "question-mark";
+          const selected = props.accessibilityState?.selected || false;
+
+          return (
+            <View style={[{ marginVertical: "auto" }]}>
+              <VerticalButton
+                title={title}
+                icon={icon}
+                selected={selected}
+                onPress={props.onPress}
+                themeColor="primary"
+              />
+            </View>
+          );
+        },
+        // tabBarBackground: () => <TabBarBackgroundWithTheme />, // Passa a View com a cor do tema
+        tabBarStyle: {
+          height: 80,
+          outline: "none",
+          backgroundColor: backgroundColor,
+          borderTopWidth: 0,
+          ...Platform.select({
+            ios: {
+              position: "absolute",
+            },
+            default: {},
+          }),
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
+          tabBarAccessibilityLabel: "home",
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
+          tabBarAccessibilityLabel: "explore",
         }}
       />
     </Tabs>

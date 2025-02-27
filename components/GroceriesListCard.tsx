@@ -7,7 +7,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedText } from "./widgets/ThemedText";
 import { GroceriesIconSet } from "./GroceriesIconSet";
 import { router } from "expo-router";
-import { tkn } from "@/constants/Theme";
+import { BorderRadius, Gaps, PaddingMargin } from "@/constants/Theme";
 import { Texts } from "./widgets/Texts";
 
 interface GroceriesListCardProps {
@@ -54,7 +54,7 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
 
       {/* Botão outline com ícone à direita */}
       <View style={styles.actions}>
-        <Button title="Ver Estoque" outline/>
+        <Button title="Ver Estoque" outline />
         <Button
           icon="shopping-cart"
           badge={badgeValue}
@@ -75,11 +75,10 @@ const styles = StyleSheet.create({
     position: "relative",
     overflow: "hidden",
     width: "100%",
-    maxWidth: 380,
     height: 200,
     alignItems: "flex-start",
-    borderRadius: tkn.br.md,
-    padding: tkn.pm.md,
+    borderRadius: BorderRadius.md,
+    padding: PaddingMargin.md,
     justifyContent: "space-between",
   },
   texts: {
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    gap: tkn.gp.md,
+    gap: Gaps.md,
   },
   icon: {
     position: "absolute",

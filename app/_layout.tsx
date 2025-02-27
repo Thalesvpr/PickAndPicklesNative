@@ -26,9 +26,10 @@ export default function RootLayout() {
   const colorScheme = useColorScheme(); // Tema do sistema
   const isDarkTheme = colorScheme === "dark";
   const [loaded] = useFonts({
+    Inter: require("../assets/fonts/Inter-Regular.ttf"),
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Poppins: require("../assets/fonts/Poppins-Regular.ttf"),
   });
-
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -45,31 +46,13 @@ export default function RootLayout() {
         <ThemeProvider value={isDarkTheme ? DarkTheme : DefaultTheme}>
           <Stack>
             {/* Tela inicial (tabs) */}
-            <Stack.Screen
-              name="(tabs)"
-              options={{ headerShown: false }} // Oculta o cabeçalho
-            />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
             {/* Tela do Carrinho */}
-            <Stack.Screen
-              name="cart"
-              options={{
-                header: ({ navigation }) => (
-                  <Header
-                    title="Carrinho"
-                    navigation={navigation}
-                    rightActions={[
-                      <Button icon="draw" />,
-                      <Button icon="draw" />,
-                      <Button icon="draw" />,
-                    ]}
-                  />
-                ),
-              }}
-            />
+            <Stack.Screen name="cart" options={{ headerShown: false }} />
 
             {/* Tela de "Não Encontrado" */}
-            <Stack.Screen name="+not-found" />
+            <Stack.Screen name="+not-found" options={{ headerShown: false }} />
           </Stack>
           <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
         </ThemeProvider>

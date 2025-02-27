@@ -1,57 +1,61 @@
-import {
-  BaseColors,
-  ContainerColors,
-  getOnContainerColor,
-} from "@/constants/Colors";
-import { tkn } from "@/constants/Theme";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { ThemedText } from "./ThemedText";
+import { View, Text, StyleSheet } from "react-native";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { BaseColors, getForwardsColor, getOnColor } from "@/constants/Colors";
 import { Texts } from "./Texts";
+import { ThemedText } from "./ThemedText";
+import { FontSizes, LineHeights } from "@/constants/Theme";
 
 interface BadgeProps {
-  value: number | string; // Valor exibido no badge (pode ser número ou texto)
+  value: number | string;
   themeColor?: BaseColors;
 }
 
-const Badge: React.FC<BadgeProps> = ({ value, themeColor = "tertiary" }) => {
-  const backgroundColor = useThemeColor({}, `${themeColor}Container`);
-  const textColor = useThemeColor({}, `${getOnContainerColor(themeColor)}`);
+const Badge: React.FC<BadgeProps> = ({ value, themeColor = "error" }) => {
+  const backgroundColor = useThemeColor({}, themeColor);
+  const textColor = useThemeColor({}, getForwardsColor(themeColor));
 
-  // Converte o valor para string para verificar o comprimento
-  const valueString = value.toString();
+  // Convert value to string to check length
+  const valueStr = value.toString();
+
+  // Dynamically adjust font size based on content length
+  const fontSize = valueStr.length > 2 ? 8 : 10;
 
   return (
     <View
       style={[
-        styles.badgeContainer,
+        styles.badge,
         {
           backgroundColor,
-          paddingHorizontal: valueString.length > 2 ? tkn.pm.sm : 0, // Ajusta o padding para valores maiores
-          borderRadius: 12, // Metade da altura para garantir que fique redondinho
+          // Add horizontal padding for longer text
+          paddingHorizontal: valueStr.length > 2 ? 4 : 2,
         },
       ]}
     >
-      <Texts.Caption
-        backwardsColor="surface"
-        numberOfLines={1} // Impede que o texto quebre
+      <ThemedText
+        numberOfLines={1}
+        fontSize={FontSizes.xs}
+        lineHeight={LineHeights.sm}
+        backwardsColor={themeColor}
       >
         {value}
-      </Texts.Caption>
+      </ThemedText>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  badgeContainer: {
-    minWidth: 22, // Largura mínima para valores pequenos
-    minHeight: 22, // Altura fixa
+  badge: {
+    minWidth: 18,
+    height: 18,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    position: "absolute", // Permite sobrepor outros elementos
-    left: 15, // Posicionamento à esquerda
-    bottom: 15, // Posicionamento na parte inferior
+    paddingHorizontal: 2,
+  },
+  badgeText: {
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

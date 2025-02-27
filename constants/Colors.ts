@@ -8,7 +8,7 @@ export const Colors = {
     secondary: "#586249",
     onSecondary: "#ffffff",
     secondaryContainer: "#dce7c7",
-    onSecondaryContainer: "#dce7c7",
+    onSecondaryContainer: "#404a33",
 
     tertiary: "#386663",
     onTertiary: "#ffffff",
@@ -133,22 +133,41 @@ export type InverseColors = Pick<
 // Tipos para cores de sombra
 export type ShadowColors = Pick<typeof Colors.light, "scrim" | "shadow">;
 
-// Função auxiliar para gerar chaves de container
+// Função utilitária para capitalizar a primeira letra de uma string
+function capitalizeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Função principal para obter cores correspondentes
+export function getForwardsColor(
+  backwardsColor: BaseColors | ContainerColors | "surface"
+): OnColors | "onSurface" | OnContainerColors {
+  if (backwardsColor === "surface") {
+    return "onSurface"; // Caso especial para "surface"
+  }
+
+  if (backwardsColor.endsWith("Container")) {
+    return `on${capitalizeFirstLetter(
+      backwardsColor.replace("Container", "")
+    )}Container` as OnContainerColors;
+  }
+
+  return `on${capitalizeFirstLetter(backwardsColor)}` as OnColors;
+}
+
+// Implementação de getContainerColor usando lógica similar à getForwardsColor
 export function getContainerColor(baseColor: BaseColors): ContainerColors {
   return `${baseColor}Container` as ContainerColors;
 }
 
-// Função auxiliar para gerar chaves "on"
+// Implementação de getOnColor usando getForwardsColor
 export function getOnColor(baseColor: BaseColors): OnColors {
-  return `on${capitalizeFirstLetter(baseColor)}` as OnColors;
+  return getForwardsColor(baseColor) as OnColors;
 }
 
-// Função auxiliar para gerar chaves "onContainer"
+// Implementação de getOnContainerColor usando getForwardsColor e getContainerColor
 export function getOnContainerColor(baseColor: BaseColors): OnContainerColors {
-  return `on${capitalizeFirstLetter(baseColor)}Container` as OnContainerColors;
-}
-
-// Função utilitária para capitalizar a primeira letra de uma string
-function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  // Primeiro obtém o container, depois obtém o "on" correspondente
+  const containerColor = getContainerColor(baseColor);
+  return getForwardsColor(containerColor) as OnContainerColors;
 }

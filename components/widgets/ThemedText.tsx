@@ -6,15 +6,17 @@ import {
   ContainerColors,
   BaseColors,
   OnContainerColors,
+  getForwardsColor,
 } from "@/constants/Colors";
 
 // Definindo os tipos de cores
 export type ThemedTextProps = TextProps & {
   backwardsColor?: BaseColors | ContainerColors | "surface";
   fontSize?: number;
-  fontWeight?: string; // Tipo correto para fontWeight
+  fontWeight?: TextStyle["fontWeight"]; // Tipo correto para fontWeight
   lineHeight?: number;
   style?: TextProps["style"];
+  nowrap?: boolean; // Propriedade para evitar quebra de linha
 };
 
 export function ThemedText({
@@ -23,35 +25,23 @@ export function ThemedText({
   fontSize,
   fontWeight,
   lineHeight,
+  nowrap,
   ...rest
 }: ThemedTextProps) {
-  // Função para determinar a cor com base no tipo
-  const getColorKey = (): OnColors | "onSurface" | OnContainerColors => {
-    if (backwardsColor === "surface") {
-      return "onSurface"; // Caso especial para "surface"
-    }
-
-    if (backwardsColor.endsWith("Container")) {
-      return `on${capitalizeFirstLetter(
-        backwardsColor.replace("Container", "")
-      )}Container` as OnContainerColors;
-    }
-
-    return `on${capitalizeFirstLetter(backwardsColor)}` as OnColors;
-  };
-
   // Obtém a cor do tema com base na chave determinada
-  const color = useThemeColor({}, getColorKey());
-  const weight = fontWeight as TextStyle["fontWeight"];
+  const color = useThemeColor({}, getForwardsColor(backwardsColor));
 
   return (
     <Text
       style={[
+        styles.defaultText, // Estilo padrão
         {
           color, // A cor é aplicada dinamicamente
           fontSize,
-          fontWeight: weight, // Agora é do tipo correto
+          fontWeight, // Agora é do tipo correto
           lineHeight,
+          fontFamily: "Inter",
+          flexShrink: nowrap ? 0 : 1, // Impede que o texto encolha se nowrap for true
         },
         style, // Estilos personalizados passados como prop
       ]}
@@ -60,14 +50,8 @@ export function ThemedText({
   );
 }
 
-// Função auxiliar para capitalizar a primeira letra de uma string
-function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-// Estilos do componente (adicione estilos personalizados aqui, se necessário)
+// Estilos do componente
 const styles = StyleSheet.create({
-  // Exemplo de estilo padrão para o texto
   defaultText: {
     fontSize: 16,
     lineHeight: 24,

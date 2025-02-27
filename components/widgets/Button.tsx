@@ -1,10 +1,15 @@
 import React from "react";
 import { Pressable, Text, StyleSheet, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { BaseColors, getOnContainerColor } from "@/constants/Colors";
+import {
+  BaseColors,
+  getForwardsColor,
+  getOnContainerColor,
+} from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Badge from "./Badge";
-import { tkn } from "@/constants/Theme";
+import { PaddingMargin } from "@/constants/Theme";
+import { Texts } from "./Texts";
 
 interface ButtonProps {
   title?: string;
@@ -26,13 +31,12 @@ const Button: React.FC<ButtonProps> = ({
   onPress,
 }) => {
   const backgroundColor = useThemeColor({}, `${themeColor}Container`);
-  const textColor = useThemeColor({}, `${getOnContainerColor(themeColor)}`);
+  const textColor = useThemeColor(
+    {},
+    `${getForwardsColor(`${themeColor}Container`)}`
+  );
   const borderColor = useThemeColor({}, "outlineVariant");
   const borderVariantColor = useThemeColor({}, "outline");
-
-  // Cores do Badge
-  const badgeBackgroundColor = useThemeColor({}, "errorContainer");
-  const badgeTextColor = useThemeColor({}, "onErrorContainer");
 
   // Determina a cor do ícone com base no estado do botão
   const contentColor = outline ? borderVariantColor : textColor;
@@ -52,6 +56,7 @@ const Button: React.FC<ButtonProps> = ({
           : { backgroundColor },
         isIconOnly && styles.iconOnlyButton, // Estilo específico para botão com apenas ícone
         title && !icon && styles.textButton, // Estilo específico para botão com apenas texto
+        title && icon && styles.textButton,
       ]}
       onPress={onPress}
     >
@@ -61,17 +66,19 @@ const Button: React.FC<ButtonProps> = ({
             <MaterialIcons
               name={icon as keyof typeof MaterialIcons.glyphMap}
               size={20}
-              color={contentColor}
+              color={textColor}
             />
             {badge && (
-              <Badge
-                value={badge}
-              />
+              <View style={styles.badgeWrapper}>
+                <Badge value={badge} themeColor="primary" />
+              </View>
             )}
           </View>
         )}
         {title && (
-          <Text style={[styles.text, { color: contentColor }]}>{title}</Text>
+          <Texts.Button backwardsColor={`${themeColor}Container`}>
+            {title}
+          </Texts.Button>
         )}
       </View>
     </Pressable>
@@ -85,6 +92,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+    position: "relative",
   },
   content: {
     flexDirection: "row",
@@ -97,14 +105,25 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   iconContainer: {
-    position: "relative",
+    width: 24,
+    height: 24,
+    justifyContent: "center",
+    alignItems: "center",
+
+    overflow: "visible",
+  },
+  badgeWrapper: {
+    position: "absolute",
+    top: -15,
+    left: 20,
+    zIndex: 1,
   },
   iconOnlyButton: {
     width: 40,
-    padding: 0, // Remove o padding padrão
+    padding: 0,
   },
   textButton: {
-    paddingHorizontal: tkn.pm.md, // Ajuste de padding para botão com apenas texto
+    paddingHorizontal: PaddingMargin.md,
   },
 });
 
