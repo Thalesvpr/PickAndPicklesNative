@@ -8,17 +8,19 @@ import {
 } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Badge from "./Badge";
-import { PaddingMargin } from "@/constants/Theme";
+import { BorderRadius, PaddingMargin, Sizes } from "@/constants/Theme";
 import { Texts } from "./Texts";
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 interface ButtonProps {
   title?: string;
   themeColor?: BaseColors;
   outline?: boolean;
-  icon?: keyof typeof MaterialIcons.glyphMap | string;
+  icon?: keyof typeof MaterialIcons.glyphMap;
   iconPosition?: "left" | "right";
-  badge?: number | string;
+  badge?: number;
   onPress?: () => void;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -29,6 +31,7 @@ const Button: React.FC<ButtonProps> = ({
   iconPosition = "left",
   badge,
   onPress,
+  disabled = false,
 }) => {
   const backgroundColor = useThemeColor({}, `${themeColor}Container`);
   const textColor = useThemeColor(
@@ -37,9 +40,6 @@ const Button: React.FC<ButtonProps> = ({
   );
   const borderColor = useThemeColor({}, "outlineVariant");
   const borderVariantColor = useThemeColor({}, "outline");
-
-  // Determina a cor do ícone com base no estado do botão
-  const contentColor = outline ? borderVariantColor : textColor;
 
   // Verifica se o botão contém apenas o ícone
   const isIconOnly = !title && icon;
@@ -57,8 +57,10 @@ const Button: React.FC<ButtonProps> = ({
         isIconOnly && styles.iconOnlyButton, // Estilo específico para botão com apenas ícone
         title && !icon && styles.textButton, // Estilo específico para botão com apenas texto
         title && icon && styles.textButton,
+        disabled && { opacity: 0.5 },
       ]}
       onPress={onPress}
+      disabled={disabled}
     >
       <View style={[styles.content, { flexDirection: contentDirection }]}>
         {icon && (
@@ -68,11 +70,11 @@ const Button: React.FC<ButtonProps> = ({
               size={20}
               color={textColor}
             />
-            {badge && (
+            {badge ? (
               <View style={styles.badgeWrapper}>
                 <Badge value={badge} themeColor="primary" />
               </View>
-            )}
+            ) : null}
           </View>
         )}
         {title && (
@@ -87,8 +89,8 @@ const Button: React.FC<ButtonProps> = ({
 
 const styles = StyleSheet.create({
   buttonBase: {
-    height: 40,
-    borderRadius: 99,
+    height: Sizes.touchMinimal,
+    borderRadius: BorderRadius.full,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",

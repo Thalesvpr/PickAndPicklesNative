@@ -3,29 +3,32 @@ import React from "react";
 import { Platform, View } from "react-native";
 import VerticalButton from "@/components/widgets/VerticalButton";
 import { useThemeColor } from "@/hooks/useThemeColor";
+import { Ionicons } from "@expo/vector-icons"; // Importe a biblioteca de ícones
 
 export default function TabLayout() {
   const backgroundColor = useThemeColor({}, "surface");
-
-  // Cria uma View com a cor do tema para ser usada como tabBarBackground
-  const TabBarBackgroundWithTheme = () => (
-    <View
-      style={{
-        backgroundColor: "green", // Usa a cor do tema
-        justifyContent: "center",
-      }}
-    />
-  );
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-
         tabBarButton: (props) => {
           const title = props.accessibilityLabel || "";
-          const icon = props.accessibilityLabel || "question-mark";
           const selected = props.accessibilityState?.selected || false;
+
+          // Defina os ícones com base no nome da aba
+          let icon;
+          switch (props.accessibilityLabel) {
+            case "home":
+              icon = "home";
+              break;
+            case "friends":
+              icon = "people";
+              break;
+            default:
+              icon = "question-mark";
+              break;
+          }
 
           return (
             <View style={[{ marginVertical: "auto" }]}>
@@ -39,7 +42,6 @@ export default function TabLayout() {
             </View>
           );
         },
-        // tabBarBackground: () => <TabBarBackgroundWithTheme />, // Passa a View com a cor do tema
         tabBarStyle: {
           height: 80,
           outline: "none",
@@ -62,10 +64,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="friends"
         options={{
-          title: "Explore",
-          tabBarAccessibilityLabel: "explore",
+          title: "Friends",
+          tabBarAccessibilityLabel: "friends",
         }}
       />
     </Tabs>

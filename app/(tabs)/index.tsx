@@ -15,7 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 import Button from "@/components/widgets/Button";
 import VerticalButton from "@/components/widgets/VerticalButton";
 import Badge from "@/components/widgets/Badge";
-import { Gaps, PaddingMargin } from "@/constants/Theme";
+import { SpaceGaps, PaddingMargin } from "@/constants/Theme";
+import { router } from "expo-router";
 
 interface GList {
   id: number;
@@ -24,7 +25,7 @@ interface GList {
   itemCount: number;
   supportingText: string;
 }
-// Dados dos cards
+
 const groceriesLists = groceriesListsDataSet;
 
 export default function HomeScreen() {
@@ -37,6 +38,14 @@ export default function HomeScreen() {
     setIsSwitchOn(value);
     setManualTheme(newTheme);
     console.log("Tema manual:", newTheme);
+  };
+
+  const handleShoppingPress = () => {
+    console.log("Compras pressionado");
+  };
+
+  const handleAddPress = () => {
+    router.push("/new-groceries-list");
   };
 
   return (
@@ -62,8 +71,13 @@ export default function HomeScreen() {
       }
     >
       <View style={styles.container}>
-        <Button icon="shopping-basket" title="Compras" themeColor="tertiary" />
-        <Button icon="add" />
+        <Button
+          icon="shopping-basket"
+          title="Compras"
+          themeColor="tertiary"
+          onPress={handleShoppingPress}
+        />
+        <Button icon="add" onPress={handleAddPress} />
       </View>
       {groceriesLists.map((list) => (
         <GroceriesListCard
@@ -86,7 +100,7 @@ const styles = StyleSheet.create({
     padding: PaddingMargin.md,
     flexDirection: "row",
     width: "100%",
-    gap: Gaps.md,
+    gap: SpaceGaps.md,
     alignItems: "flex-start",
   },
 });

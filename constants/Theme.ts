@@ -9,10 +9,11 @@ export const FontSizes = {
   xxl: 24,
 };
 
-export const Gaps = {
+export const SpaceGaps = {
   sm: 5,
   md: 10,
   lg: 20,
+  xl: 40,
 };
 
 export const BorderRadius = {
@@ -47,4 +48,8 @@ export const PaddingMargin = {
   sm: 8,
   md: 16,
   lg: 24,
+};
+
+export const Sizes = {
+  touchMinimal: 40,
 };

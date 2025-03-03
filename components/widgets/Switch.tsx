@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Pressable,
-  View,
-  Animated,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { Pressable, View, Animated, StyleSheet, ViewStyle } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { BaseColors } from "@/constants/Colors";
 
@@ -79,7 +73,6 @@ export function Switch({
   const icon = isOn ? iconOn : iconOff;
 
   const containerStyle: ViewStyle = {
-    width: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: align === "right" ? "flex-end" : "flex-start",

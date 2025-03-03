@@ -1,11 +1,8 @@
 import { Text, type TextProps, StyleSheet, type TextStyle } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import {
-  Colors,
-  OnColors,
   ContainerColors,
   BaseColors,
-  OnContainerColors,
   getForwardsColor,
 } from "@/constants/Colors";
 
@@ -32,7 +29,7 @@ export function ThemedText({
   const color = useThemeColor({}, getForwardsColor(backwardsColor));
 
   return (
-    <ThemedText
+    <Text
       style={[
         styles.defaultText, // Estilo padrão
         {

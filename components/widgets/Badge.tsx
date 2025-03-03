@@ -1,13 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { BaseColors, getForwardsColor, getOnColor } from "@/constants/Colors";
-import { Texts } from "./Texts";
+import { BaseColors, getForwardsColor } from "@/constants/Colors";
 import { ThemedText } from "./ThemedText";
 import { FontSizes, LineHeights } from "@/constants/Theme";
 
 interface BadgeProps {
-  value: number | string;
+  value: number;
   themeColor?: BaseColors;
 }
 
@@ -22,25 +21,30 @@ const Badge: React.FC<BadgeProps> = ({ value, themeColor = "error" }) => {
   const fontSize = valueStr.length > 2 ? 8 : 10;
 
   return (
-    <View
-      style={[
-        styles.badge,
-        {
-          backgroundColor,
-          // Add horizontal padding for longer text
-          paddingHorizontal: valueStr.length > 2 ? 4 : 2,
-        },
-      ]}
-    >
-      <ThemedText
-        numberOfLines={1}
-        fontSize={FontSizes.xs}
-        lineHeight={LineHeights.sm}
-        backwardsColor={themeColor}
-      >
-        {value}
-      </ThemedText>
-    </View>
+    <>
+      {value > 0 && (
+        <View
+          style={[
+            styles.badge,
+            {
+              backgroundColor,
+              // Add horizontal padding for longer text
+              paddingHorizontal: valueStr.length > 2 ? 4 : 2,
+            },
+          ]}
+        >
+          <ThemedText
+            numberOfLines={1}
+            fontSize={FontSizes.xs}
+            lineHeight={LineHeights.sm}
+            backwardsColor={themeColor}
+            style={{ color: textColor, fontSize }}
+          >
+            {value}
+          </ThemedText>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -51,11 +55,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 2,
-  },
-  badgeText: {
-    fontWeight: "bold",
-    textAlign: "center",
   },
 });
 

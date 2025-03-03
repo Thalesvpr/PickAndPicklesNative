@@ -1,13 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ListCount from "./widgets/ListCount"; // Importando o componente ListCount
-import { MaterialIcons } from "@expo/vector-icons";
 import Button from "./widgets/Button";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { ThemedText } from "./widgets/ThemedText";
 import { GroceriesIconSet } from "./GroceriesIconSet";
 import { router } from "expo-router";
-import { BorderRadius, Gaps, PaddingMargin } from "@/constants/Theme";
+import { BorderRadius, SpaceGaps, PaddingMargin } from "@/constants/Theme";
 import { Texts } from "./widgets/Texts";
 
 interface GroceriesListCardProps {
@@ -18,6 +16,7 @@ interface GroceriesListCardProps {
   icon: keyof typeof GroceriesIconSet;
   id: number;
   badgeValue: number;
+  disabled?: boolean;
 }
 
 const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
@@ -28,11 +27,12 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
   onAddItem,
   badgeValue,
   icon,
+  disabled = false,
 }) => {
   const backgroundColor = useThemeColor({}, "surfaceContainer");
   const IconComponent = GroceriesIconSet[icon];
   const handleNavigateToCart = (id: number) => {
-    router.push(`/cart?id=${id}`);
+    // router.push(`/cart?id=${id}`);
   };
   return (
     <View style={[styles.card, { backgroundColor: backgroundColor }]}>
@@ -54,11 +54,12 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
 
       {/* Botão outline com ícone à direita */}
       <View style={styles.actions}>
-        <Button title="Ver Estoque" outline />
+        <Button title="Ver Estoque" outline disabled={disabled} />
         <Button
           icon="shopping-cart"
           badge={badgeValue}
           onPress={() => handleNavigateToCart(id)}
+          disabled={disabled}
         />
       </View>
 
@@ -82,14 +83,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   texts: {
+    // backgroundColor: "red",
     gap: 10,
+    maxWidth: 200,
   },
   actions: {
     flexDirection: "row",
-    gap: Gaps.md,
+    gap: SpaceGaps.md,
   },
   icon: {
-  
     position: "absolute",
     right: 0,
     bottom: 0,

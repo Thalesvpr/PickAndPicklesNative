@@ -1,4 +1,4 @@
-import { Gaps } from "@/constants/Theme";
+import { SpaceGaps } from "@/constants/Theme";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import React from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     padding: 16,
-    gap: Gaps.lg,
+    gap: SpaceGaps.lg,
   },
 });

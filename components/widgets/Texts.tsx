@@ -41,4 +41,12 @@ export const Texts = {
       fontWeight={FontWeights.normal} // fontWeight normal
     />
   ),
+  Label: (props: ThemedTextProps) => (
+    <ThemedText
+      {...props}
+      fontSize={FontSizes.sm}
+      fontWeight={FontWeights.normal}
+      lineHeight={LineHeights.sm}
+    />
+  ),
 };

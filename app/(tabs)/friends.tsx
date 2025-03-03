@@ -4,6 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Scaffold } from "@/components/ui/Scaffold";
 import { Header } from "@/components/ui/Header";
+import Button from "@/components/widgets/Button";
 
 const ListScreen = () => {
   const navigation = useNavigation();
@@ -12,14 +13,10 @@ const ListScreen = () => {
     <Scaffold
       header={
         <Header
-          title="Home"
+          title="Friends"
           navigation={navigation}
           showBackButton={true}
-          rightActions={[
-            <TouchableOpacity onPress={() => console.log("Notificações")}>
-              <MaterialIcons name="notifications" size={24} color="white" />
-            </TouchableOpacity>,
-          ]}
+          rightActions={[<Button icon="notifications" />]}
         />
       }
     >

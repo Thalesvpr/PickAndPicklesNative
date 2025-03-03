@@ -50,6 +50,15 @@ export default function RootLayout() {
 
             {/* Tela do Carrinho */}
             <Stack.Screen name="cart" options={{ headerShown: false }} />
+            {/* Tela de New Groceries List */}
+            <Stack.Screen
+              name="new-groceries-list"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="grocery-list"
+              options={{ headerShown: false }}
+            />
 
             {/* Tela de "Não Encontrado" */}
             <Stack.Screen name="+not-found" options={{ headerShown: false }} />

@@ -11,7 +11,6 @@ import {
   BaseColors,
   ContainerColors,
   getForwardsColor,
-  getOnColor,
   getOnContainerColor,
 } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,7 +19,7 @@ import {
   BorderRadius,
   FontSizes,
   FontWeights,
-  Gaps,
+  SpaceGaps,
   PaddingMargin,
 } from "@/constants/Theme";
 import { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
-    gap: Gaps.sm,
+    gap: SpaceGaps.sm,
   },
   text: {
     fontSize: FontSizes.sm,

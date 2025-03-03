@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Texts } from "../widgets/Texts";
-import { Gaps, PaddingMargin } from "@/constants/Theme";
+import { PaddingMargin, SpaceGaps } from "@/constants/Theme";
 
 interface HeaderProps {
-  title: string;
+  title?: string;
   navigation: any; // Tipo pode ser ajustado conforme necessário
   showBackButton?: boolean;
   rightActions?: React.ReactNode[];
@@ -23,39 +23,58 @@ export const Header = ({
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      {/* Botão de voltar */}
-      {showBackButton && (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialIcons name="arrow-back-ios" size={20} color={iconColor} />
-        </TouchableOpacity>
-      )}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexGrow: 1,
+        }}
+      >
+        {/* Botão de voltar */}
+        {showBackButton && (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons name="arrow-back-ios" size={20} color={iconColor} />
+          </TouchableOpacity>
+        )}
 
-      <Texts.Headline style={styles.title}>{title}</Texts.Headline>
+        {title && <Texts.Headline style={styles.title}>{title}</Texts.Headline>}
 
-      {/* Ações à direita */}
-      {rightActions?.map((action, index) => (
-        <View key={index} style={styles.rightActions}>
-          {action}
+        {/* Ações à direita */}
+        <View style={styles.rightActions}>
+          {rightActions?.map((action, index) => (
+            <View key={index} style={styles.rightActionsItem}>
+              {action}
+            </View>
+          ))}
         </View>
-      ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 86,
+    height: 120,
     flexDirection: "row",
     alignItems: "flex-end",
-    gap: Gaps.md,
-    paddingHorizontal: PaddingMargin.md,
+    gap: SpaceGaps.md,
+    paddingHorizontal: PaddingMargin.lg,
     paddingVertical: PaddingMargin.md,
   },
   title: {
     flex: 1, // Ensure the title takes up the available space
-    marginLeft: Gaps.md, // Add some margin if needed
+    marginLeft: SpaceGaps.md, // Add some margin if needed
   },
   rightActions: {
-    marginLeft: "auto",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: SpaceGaps.md,
+  },
+  rightActionsItem: {
+    // backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
