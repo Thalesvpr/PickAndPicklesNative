@@ -13,6 +13,7 @@ import { ThemedText } from "./widgets/ThemedText";
 import Divider from "./widgets/Divider";
 import { Texts } from "./widgets/Texts";
 import { MaterialIcons } from "@expo/vector-icons";
+import Button from "./widgets/Button";
 
 interface IconSelectProps {
   onSelect: (category: keyof typeof GroceriesIconSet) => void; // Função chamada quando um ícone é selecionado
@@ -127,6 +128,16 @@ const IconSelect: React.FC<IconSelectProps> = ({ onSelect }) => {
           })}
         </ScrollView>
       )}
+      {isOpen && (
+        <View style={styles.close_button}>
+          <Button
+            icon="close"
+            onPress={() => {
+              setIsOpen(false);
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -167,6 +178,11 @@ const styles = StyleSheet.create({
     top: "50%", // Move o elemento para 50% do topo
     transform: [{ translateY: -50 }],
     width: "auto",
+  },
+  close_button: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 

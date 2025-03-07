@@ -6,42 +6,70 @@ export const Texts = {
   Headline: (props: ThemedTextProps) => (
     <ThemedText
       {...props}
-      fontSize={FontSizes.xl} // fontSize 20
-      fontWeight={FontWeights.medium} // fontWeight medium
+      fontSize={FontSizes.xl}
+      fontWeight={FontWeights.medium}
     />
   ),
   Subheadline: (props: ThemedTextProps) => (
     <ThemedText
       {...props}
-      fontSize={FontSizes.xl} // fontSize 20
-      fontWeight={FontWeights.medium} // fontWeight 600
-      lineHeight={LineHeights.xl} // lineHeight 32
+      fontSize={FontSizes.md}
+      fontWeight={FontWeights.medium}
+      lineHeight={LineHeights.md}
     />
   ),
   SupportingText: (props: ThemedTextProps) => (
     <ThemedText
       {...props}
-      fontSize={FontSizes.sm} // fontSize 16
-      fontWeight={FontWeights.normal} // fontWeight normal
-      lineHeight={LineHeights.sm} // lineHeight 24
+      fontSize={FontSizes.sm}
+      fontWeight={FontWeights.normal}
+      lineHeight={LineHeights.sm}
     />
   ),
   Caption: (props: ThemedTextProps) => (
     <ThemedText
       {...props}
-      fontSize={FontSizes.xs} // fontSize 12
-      fontWeight={FontWeights.medium} // fontWeight normal
-      lineHeight={LineHeights.xs} // lineHeight 16
+      fontSize={FontSizes.xs}
+      fontWeight={FontWeights.medium}
+      lineHeight={LineHeights.xs}
     />
   ),
   Button: (props: ThemedTextProps) => (
     <ThemedText
       {...props}
       fontSize={FontSizes.sm}
-      fontWeight={FontWeights.normal} // fontWeight normal
+      fontWeight={FontWeights.normal}
     />
   ),
   Label: (props: ThemedTextProps) => (
+    <ThemedText
+      {...props}
+      fontSize={FontSizes.sm}
+      fontWeight={FontWeights.normal}
+      lineHeight={LineHeights.sm}
+    />
+  ),
+};
+
+// Objeto BodyTexts com Composition Pattern
+export const BodyTexts = {
+  Title: (props: ThemedTextProps) => (
+    <ThemedText
+      {...props}
+      fontSize={FontSizes.xl}
+      fontWeight={FontWeights.normal}
+      lineHeight={LineHeights.xl}
+    />
+  ),
+  Subtitle: (props: ThemedTextProps) => (
+    <ThemedText
+      {...props}
+      fontSize={FontSizes.md} // 20
+      fontWeight={FontWeights.semibold}
+      lineHeight={LineHeights.md}
+    />
+  ),
+  Description: (props: ThemedTextProps) => (
     <ThemedText
       {...props}
       fontSize={FontSizes.sm}

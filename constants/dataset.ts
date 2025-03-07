@@ -49,7 +49,7 @@ export const groceriesListsDataSet: GroceryList[] = [
   {
     id: 2,
     listName: "Weekly Shopping",
-    icon: "Limao",
+    icon: "Desenfetante",
     supportingText: "Essential items for the week",
     items: [
       {
@@ -69,7 +69,7 @@ export const groceriesListsDataSet: GroceryList[] = [
   {
     id: 3,
     listName: "Special Shopping",
-    icon: "Nabo",
+    icon: "Luva",
     supportingText: "Special items for occasions",
     items: [
       {

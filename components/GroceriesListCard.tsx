@@ -32,7 +32,7 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
   const backgroundColor = useThemeColor({}, "surfaceContainer");
   const IconComponent = GroceriesIconSet[icon];
   const handleNavigateToCart = (id: number) => {
-    // router.push(`/cart?id=${id}`);
+    router.push(`/grocery-list?id=${id}`);
   };
   return (
     <View style={[styles.card, { backgroundColor: backgroundColor }]}>
@@ -54,10 +54,13 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
 
       {/* Botão outline com ícone à direita */}
       <View style={styles.actions}>
-        <Button title="Ver Estoque" outline disabled={disabled} />
         <Button
-          icon="shopping-cart"
+          icon="file-cabinet"
+          iconSource="materialCommunity"
           badge={badgeValue}
+          iconPosition="right"
+          outline
+          title="Ver Estoque"
           onPress={() => handleNavigateToCart(id)}
           disabled={disabled}
         />

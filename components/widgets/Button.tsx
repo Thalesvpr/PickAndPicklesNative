@@ -6,7 +6,7 @@ import {
   getForwardsColor,
   getOnContainerColor,
 } from "@/constants/Colors";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Badge from "./Badge";
 import { BorderRadius, PaddingMargin, Sizes } from "@/constants/Theme";
 import { Texts } from "./Texts";
@@ -16,29 +16,35 @@ interface ButtonProps {
   title?: string;
   themeColor?: BaseColors;
   outline?: boolean;
-  icon?: keyof typeof MaterialIcons.glyphMap;
+  icon?:
+    | keyof typeof MaterialIcons.glyphMap
+    | keyof typeof MaterialCommunityIcons.glyphMap;
+  iconSource?: "material" | "materialCommunity";
   iconPosition?: "left" | "right";
   badge?: number;
   onPress?: () => void;
   disabled?: boolean;
+  raw?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
   title,
   outline = false,
   icon,
+  iconSource = "material",
   themeColor = "primary",
   iconPosition = "left",
   badge,
   onPress,
   disabled = false,
+  raw,
 }) => {
   const backgroundColor = useThemeColor({}, `${themeColor}Container`);
   const textColor = useThemeColor(
     {},
     `${getForwardsColor(`${themeColor}Container`)}`
   );
-  const borderColor = useThemeColor({}, "outlineVariant");
+  const borderColor = themeColor && useThemeColor({}, "outlineVariant");
   const borderVariantColor = useThemeColor({}, "outline");
 
   // Verifica se o botão contém apenas o ícone
@@ -53,6 +59,11 @@ const Button: React.FC<ButtonProps> = ({
         styles.buttonBase,
         outline
           ? { backgroundColor: "transparent", borderColor, borderWidth: 2 }
+          : raw
+          ? {
+              backgroundColor: "transparent",
+              borderWidth: 0,
+            }
           : { backgroundColor },
         isIconOnly && styles.iconOnlyButton, // Estilo específico para botão com apenas ícone
         title && !icon && styles.textButton, // Estilo específico para botão com apenas texto
@@ -65,11 +76,19 @@ const Button: React.FC<ButtonProps> = ({
       <View style={[styles.content, { flexDirection: contentDirection }]}>
         {icon && (
           <View style={styles.iconContainer}>
-            <MaterialIcons
-              name={icon as keyof typeof MaterialIcons.glyphMap}
-              size={20}
-              color={textColor}
-            />
+            {iconSource === "material" ? (
+              <MaterialIcons
+                name={icon as keyof typeof MaterialIcons.glyphMap}
+                size={20}
+                color={textColor}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name={icon as keyof typeof MaterialCommunityIcons.glyphMap}
+                size={20}
+                color={textColor}
+              />
+            )}
             {badge ? (
               <View style={styles.badgeWrapper}>
                 <Badge value={badge} themeColor="primary" />
@@ -111,7 +130,6 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: "center",
     alignItems: "center",
-
     overflow: "visible",
   },
   badgeWrapper: {

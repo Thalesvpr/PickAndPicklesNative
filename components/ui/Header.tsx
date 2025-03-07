@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Texts } from "../widgets/Texts";
-import { PaddingMargin, SpaceGaps } from "@/constants/Theme";
+import { PaddingMargin, Sizes, SpaceGaps } from "@/constants/Theme";
 
 interface HeaderProps {
   title?: string;
@@ -33,7 +33,10 @@ export const Header = ({
       >
         {/* Botão de voltar */}
         {showBackButton && (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.touchMin}
+          >
             <MaterialIcons name="arrow-back-ios" size={20} color={iconColor} />
           </TouchableOpacity>
         )}
@@ -54,6 +57,13 @@ export const Header = ({
 };
 
 const styles = StyleSheet.create({
+  touchMin: {
+    // backgroundColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+    height: Sizes.touchMinimal,
+    width: Sizes.touchMinimal,
+  },
   container: {
     height: 120,
     flexDirection: "row",

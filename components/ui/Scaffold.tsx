@@ -1,25 +1,19 @@
-import { SpaceGaps } from "@/constants/Theme";
+// Scaffold.tsx
+import { StyleSheet, View } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React from "react";
-import { View, ScrollView, StyleSheet } from "react-native";
 
 interface ScaffoldProps {
   children: React.ReactNode;
-  header?: React.ReactNode; // Header personalizado (opcional)
+  header?: React.ReactNode;
 }
 
 export const Scaffold = ({ children, header }: ScaffoldProps) => {
   const backgroundColor = useThemeColor({}, "surface");
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      {header && <View>{header}</View>}
-
-      {/* Conteúdo principal com ScrollView */}
-      <ScrollView contentContainerStyle={[styles.content, { backgroundColor }]}>
-        {children}
-      </ScrollView>
+    <View style={[styles.container, { backgroundColor }]}>
+      {header}
+      <View style={styles.content}>{children}</View>
     </View>
   );
 };
@@ -29,8 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flexGrow: 1,
-    padding: 16,
-    gap: SpaceGaps.lg,
+    flex: 1,
+    overflow: "hidden", // Crucial para Android
   },
 });

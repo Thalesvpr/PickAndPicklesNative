@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Switch } from "@/components/widgets/Switch";
 import { useManualTheme } from "@/contexts/ManualThemeContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import GroceriesListCard from "@/components/GroceriesListCard";
 import Divider from "@/components/widgets/Divider";
-import { ScrollView } from "react-native-gesture-handler";
 import { GroceriesIconSet } from "@/components/GroceriesIconSet";
 import { groceriesListsDataSet } from "@/constants/dataset";
 import { Scaffold } from "@/components/ui/Scaffold";
@@ -22,7 +27,7 @@ interface GList {
   id: number;
   listName: string;
   icon: keyof typeof GroceriesIconSet;
-  itemCount: number;
+  items: any[]; // Assuming items is an array of any type
   supportingText: string;
 }
 
@@ -79,18 +84,20 @@ export default function HomeScreen() {
         />
         <Button icon="add" onPress={handleAddPress} />
       </View>
-      {groceriesLists.map((list) => (
-        <GroceriesListCard
-          id={list.id}
-          listName={list.listName}
-          icon={list.icon}
-          badgeValue={100}
-          itemCount={list.items.length}
-          supportingText={list.supportingText}
-          onAddItem={() => console.log(list.listName)}
-          key={list.id}
-        />
-      ))}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {groceriesLists.map((list) => (
+          <GroceriesListCard
+            id={list.id}
+            listName={list.listName}
+            icon={list.icon}
+            badgeValue={100}
+            itemCount={list.items.length}
+            supportingText={list.supportingText}
+            onAddItem={() => console.log(list.listName)}
+            key={list.id}
+          />
+        ))}
+      </ScrollView>
     </Scaffold>
   );
 }
@@ -102,5 +109,9 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: SpaceGaps.md,
     alignItems: "flex-start",
+  },
+  scrollContainer: {
+    gap: SpaceGaps.md,
+    paddingHorizontal: PaddingMargin.md,
   },
 });

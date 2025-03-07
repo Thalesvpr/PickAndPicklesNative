@@ -49,7 +49,9 @@ export const PaddingMargin = {
   md: 16,
   lg: 24,
 };
-
 export const Sizes = {
   touchMinimal: 40,
+  smallContainerHeight: 60, // Altura para itens de lista
+  mediumContainerHeight: 80, // Altura para cards ou seções médias
+  largeContainerHeight: 200, // Altura para containers grandes, como cabeçalhos ou seções destacadas
 };

@@ -10,7 +10,7 @@ import Button from "@/components/widgets/Button";
 import IconSelect from "@/components/IconSelect";
 import { GroceriesIconSet } from "@/components/GroceriesIconSet";
 import Divider from "@/components/widgets/Divider";
-import { SpaceGaps } from "@/constants/Theme";
+import { BorderRadius, PaddingMargin, SpaceGaps } from "@/constants/Theme";
 
 const NewGroceriesListScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -29,25 +29,35 @@ const NewGroceriesListScreen: React.FC = () => {
           navigation={navigation}
           showBackButton
           title="Novo Grupo"
-          rightActions={[<Button icon={"info"} themeColor="tertiary" />]}
+          rightActions={[
+            <Button
+              key="info"
+              icon="information-variant"
+              iconSource="materialCommunity"
+              onPress={() => true} // Abre o modal
+              outline
+            />,
+          ]}
         />
       }
     >
       {/* Exibe o GroceriesListCard com os valores preenchidos */}
-      <GroceriesListCard
-        listName={listName ? listName : `"Compras do Mês"`} // Texto padrão
-        itemCount={99} // Valor padrão
-        supportingText={
-          supportingText
-            ? supportingText
-            : `"grupo de compras para o mês atual"`
-        } // Texto padrão
-        onAddItem={handleAddItem}
-        icon={icon} // Ícone padrão
-        id={1} // Valor fixo
-        badgeValue={0} // Valor padrão
-        disabled
-      />
+      <View style={styles.cardContainer}>
+        <GroceriesListCard
+          listName={listName ? listName : `"Compras do Mês"`} // Texto padrão
+          itemCount={99} // Valor padrão
+          supportingText={
+            supportingText
+              ? supportingText
+              : `"grupo de compras para o mês atual"`
+          } // Texto padrão
+          onAddItem={handleAddItem}
+          icon={icon} // Ícone padrão
+          id={1} // Valor fixo
+          badgeValue={0} // Valor padrão
+          disabled
+        />
+      </View>
       <ScrollView>
         {/* Envolva o conteúdo em uma View e aplique o estilo */}
         <View style={styles.container}>
@@ -84,8 +94,11 @@ const NewGroceriesListScreen: React.FC = () => {
 
 // Estilos
 const styles = StyleSheet.create({
+  cardContainer: {
+    paddingHorizontal: PaddingMargin.md,
+  },
   container: {
-    width: "100%",
+    margin: PaddingMargin.md,
     gap: SpaceGaps.lg, // Espaçamento entre os elementos
     flexDirection: "column", // Alinhamento vertical
     alignItems: "stretch", // Centraliza os itens horizontalmente

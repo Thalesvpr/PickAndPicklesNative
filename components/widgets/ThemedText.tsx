@@ -9,6 +9,7 @@ import {
 // Definindo os tipos de cores
 export type ThemedTextProps = TextProps & {
   backwardsColor?: BaseColors | ContainerColors | "surface";
+  themeColor?: BaseColors | ContainerColors | "surface" | "outline";
   fontSize?: number;
   fontWeight?: TextStyle["fontWeight"]; // Tipo correto para fontWeight
   lineHeight?: number;
@@ -18,6 +19,7 @@ export type ThemedTextProps = TextProps & {
 
 export function ThemedText({
   style,
+  themeColor,
   backwardsColor = "surface",
   fontSize,
   fontWeight,
@@ -26,14 +28,18 @@ export function ThemedText({
   ...rest
 }: ThemedTextProps) {
   // Obtém a cor do tema com base na chave determinada
-  const color = useThemeColor({}, getForwardsColor(backwardsColor));
+  const forwordsThemeColor = useThemeColor(
+    {},
+    getForwardsColor(backwardsColor)
+  );
+  const color = useThemeColor({}, themeColor ? themeColor : "error");
 
   return (
     <Text
       style={[
         styles.defaultText, // Estilo padrão
         {
-          color, // A cor é aplicada dinamicamente
+          color: themeColor ? color : forwordsThemeColor, // A cor é aplicada dinamicamente
           fontSize,
           fontWeight, // Agora é do tipo correto
           lineHeight,
