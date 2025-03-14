@@ -12,8 +12,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColor } from "../../hooks/useThemeColor";
-import Button from "./Button";
+import { Button } from "./Button";
 import { Texts } from "./Texts";
+import { PaddingMargin } from "@/constants/Theme";
 
 // Interface principal do modal
 interface ModalProps {
@@ -181,7 +182,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   modal: {
-    width: "90%",
+    width: "100%",
+    margin: PaddingMargin.md,
     borderRadius: 10,
     padding: 20,
   },

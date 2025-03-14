@@ -12,9 +12,10 @@ import { BorderRadius, PaddingMargin, Sizes } from "@/constants/Theme";
 import { Texts } from "./Texts";
 import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
-interface ButtonProps {
+export interface ButtonProps {
   title?: string;
   themeColor?: BaseColors;
+  badgeThemeColor?: BaseColors;
   outline?: boolean;
   icon?:
     | keyof typeof MaterialIcons.glyphMap
@@ -27,12 +28,14 @@ interface ButtonProps {
   raw?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   title,
   outline = false,
   icon,
   iconSource = "material",
   themeColor = "primary",
+  badgeThemeColor = "primary",
+
   iconPosition = "left",
   badge,
   onPress,
@@ -91,7 +94,10 @@ const Button: React.FC<ButtonProps> = ({
             )}
             {badge ? (
               <View style={styles.badgeWrapper}>
-                <Badge value={badge} themeColor="primary" />
+                <Badge
+                  value={badge}
+                  themeColor={badgeThemeColor ? badgeThemeColor : themeColor}
+                />
               </View>
             ) : null}
           </View>
@@ -146,5 +152,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: PaddingMargin.md,
   },
 });
-
-export default Button;

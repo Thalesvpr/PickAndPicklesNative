@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, ScrollView, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useLocalSearchParams } from "expo-router"; // Usando Expo Router
 import { Scaffold } from "@/components/ui/Scaffold";
 import { Header } from "@/components/ui/Header";
-import Button from "@/components/widgets/Button";
+import { Button } from "@/components/widgets/Button";
 import {
   BorderRadius,
   FontSizes,
@@ -12,102 +12,155 @@ import {
   Sizes,
   SpaceGaps,
 } from "@/constants/Theme";
-import ProductItemCard from "@/components/ProductItemCard";
-import { RainbowBaseColors } from "@/constants/VariantCalors";
+import { RainbowBaseColors } from "@/constants/VariantColors";
 import { ThemedText } from "@/components/widgets/ThemedText";
 import { GroceriesIconSet } from "@/components/GroceriesIconSet";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Switch } from "@/components/widgets/Switch";
 import GroceryListInfoModal from "@/components/GroceryList/GroceryListInfoModal";
+import {
+  getTagColor,
+  GroceryItem,
+  useGroceries,
+} from "@/contexts/GroceriesContext"; // Importando o contexto
+import { ProductItemCard } from "@/components/ItemCard";
+import Tag from "@/components/widgets/Tag";
+import { Texts } from "@/components/widgets/Texts";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-interface Product {
-  id: number;
-  name: string;
-  quantity: string;
-  count: number;
-  tagText: string;
-  tagColor: RainbowBaseColors;
-}
+// Props do componente Card
+type CardProps = {
+  product: GroceryItem;
+  isEditing: boolean; // Estado de edição (seleção)
+  onRemove: (productId: number) => void;
+  onEdit: (productId: number) => void;
+  onToggleEditing: (productId: number) => void; // Alterna o estado de edição
+  isInItemsToBuy: boolean; // Indica se o item está em itemsToBuy
+};
+
+// Componente Card
+const Card = ({
+  product,
+  isEditing,
+  onRemove,
+  onEdit,
+  onToggleEditing,
+  isInItemsToBuy,
+}: CardProps) => {
+  const getVolumesTagColor = (
+    volumes: number,
+    isInItemsToBuy: boolean
+  ): "secondary" | "primary" | "error" | "tertiary" => {
+    if (volumes <= 0) {
+      return isInItemsToBuy ? "tertiary" : "error"; // Se estiver em itemsToBuy, usa "tertiary"
+    }
+    if (volumes < 2) return "secondary";
+    return "primary";
+  };
+
+  const getVolumesTagIcon = (
+    volumes: number,
+    isInItemsToBuy: boolean
+  ): keyof typeof MaterialCommunityIcons.glyphMap => {
+    if (volumes <= 0) {
+      return isInItemsToBuy ? "basket-check-outline" : "close"; // Se estiver em itemsToBuy, usa "basket"
+    }
+    if (volumes < 2) return "chili-alert";
+    return "check";
+  };
+
+  return (
+    <ProductItemCard.Container
+      key={product.id}
+      isEditing={isEditing} // Controla o estado visual de edição/seleção
+      onToggleEditing={() => onToggleEditing(product.id)} // Alterna a edição ao clicar
+      actions={
+        <ProductItemCard.Actions>
+          {product.volumes > 0 && (
+            <Button
+              icon="remove"
+              title={"1"}
+              themeColor="error"
+              outline
+              onPress={() => {}}
+            />
+          )}
+          {product.volumes < 2 && !isInItemsToBuy && (
+            <Button
+              icon="basket-plus-outline"
+              iconSource="materialCommunity"
+              themeColor="tertiary"
+              outline
+              onPress={() => {}}
+            />
+          )}
+          <Button
+            icon="delete-outline"
+            onPress={() => onRemove(product.id)}
+            themeColor="error"
+            outline
+          />
+          <Button
+            icon="pencil"
+            iconSource="materialCommunity"
+            onPress={() => onEdit(product.id)}
+            themeColor="secondary"
+            outline
+          />
+        </ProductItemCard.Actions>
+      }
+    >
+      <ProductItemCard.Content>
+        <Texts.Subheadline>{product.name}</Texts.Subheadline>
+        <Texts.SupportingText>
+          {product.quantityPerUnit.quantity} {product.quantityPerUnit.unit}
+        </Texts.SupportingText>
+      </ProductItemCard.Content>
+      <ProductItemCard.Tags>
+        <Tag
+          text={product.categoryTag.value}
+          color={getTagColor(product.categoryTag)}
+        />
+        <Tag
+          text={product.volumes}
+          color={getVolumesTagColor(product.volumes, isInItemsToBuy)}
+          icon={getVolumesTagIcon(product.volumes, isInItemsToBuy)}
+          iconSource="materialCommunity"
+        />
+      </ProductItemCard.Tags>
+    </ProductItemCard.Container>
+  );
+};
 
 export default function ProductListScreen() {
   const navigation = useNavigation();
-  const [autoAdd, setAutoAdd] = useState<boolean>(false);
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: 1,
-      name: "Leite em pó",
-      quantity: "500g",
-      count: 100,
-      tagText: "Avulso",
-      tagColor: "indigo",
-    },
-    {
-      id: 2,
-      name: "Arroz",
-      quantity: "1kg",
-      count: 50,
-      tagText: "Importante",
-      tagColor: "red",
-    },
-    {
-      id: 3,
-      name: "Feijão",
-      quantity: "1kg",
-      count: 80,
-      tagText: "Avulso",
-      tagColor: "indigo",
-    },
-    {
-      id: 4,
-      name: "Café",
-      quantity: "250g",
-      count: 0,
-      tagText: "Comum",
-      tagColor: "blue",
-    },
-    {
-      id: 5,
-      name: "Açúcar",
-      quantity: "1kg",
-      count: 40,
-      tagText: "Opcional",
-      tagColor: "yellow",
-    },
-    {
-      id: 6,
-      name: "Macarrão",
-      quantity: "500g",
-      count: 60,
-      tagText: "Essencial",
-      tagColor: "green",
-    },
-    {
-      id: 7,
-      name: "Farinha",
-      quantity: "1kg",
-      count: 45,
-      tagText: "Urgente",
-      tagColor: "orange",
-    },
-  ]);
+  const { id } = useLocalSearchParams(); // Obtendo o ID da lista da URL
+  const { groceriesLists } = useGroceries(); // Usando o contexto
 
-  const totalCount = products.reduce((sum, product) => sum + product.count, 0);
+  // Encontrando a lista correspondente ao ID da URL
+  const currentList = groceriesLists.find((list) => list.id === Number(id));
+
+  const [autoAdd, setAutoAdd] = useState<boolean>(false);
+  const [isInfoModalVisible, setIsInfoModalVisible] = useState(false); // Estado para controlar o modal
+  const [editingProductId, setEditingProductId] = useState<number | null>(null);
+  const [selectedProducts, setSelectedProducts] = useState<number[]>([]); // Armazena os IDs dos produtos selecionados
 
   const listHeadBackgroundColor = useThemeColor({}, "surfaceContainerLowest");
   const switchBackgroundColor = useThemeColor({}, "surfaceContainer");
 
-  const [editingProductId, setEditingProductId] = useState<number | null>(null);
-  const [isInfoModalVisible, setIsInfoModalVisible] = useState(false); // Estado para controlar o modal
-
-  const listIcon: keyof typeof GroceriesIconSet = "Abobora";
   const ListIconComponent =
-    GroceriesIconSet[listIcon as keyof typeof GroceriesIconSet];
+    GroceriesIconSet[currentList?.icon as keyof typeof GroceriesIconSet];
+
+  const totalCount = currentList?.items.reduce(
+    (sum, product) => sum + product.volumes,
+    0
+  );
+  const totalZerosCount = currentList?.items.filter(
+    (product) => product.volumes === 0
+  ).length;
 
   const handleDelete = (id: number) => {
-    setProducts(products.filter((product) => product.id !== id));
-    if (editingProductId === id) {
-      setEditingProductId(null);
-    }
+    Alert.alert("Remover", `Remover produto ${id}`);
   };
 
   const handleEdit = (id: number) => {
@@ -118,11 +171,33 @@ export default function ProductListScreen() {
     setEditingProductId(editingProductId === id ? null : id);
   };
 
+  const toggleProductSelection = (productId: number) => {
+    setSelectedProducts(
+      (prevSelected) =>
+        prevSelected.includes(productId)
+          ? prevSelected.filter((id) => id !== productId) // Remove o produto se já estiver selecionado
+          : [...prevSelected, productId] // Adiciona o produto se não estiver selecionado
+    );
+  };
+
+  const handleConfirmAll = () => {
+    // Lógica para confirmar todos os produtos selecionados
+    setSelectedProducts([]); // Limpa a lista de produtos selecionados após a confirmação
+  };
+
+  if (!currentList) {
+    return (
+      <View>
+        <ThemedText>Lista não encontrada</ThemedText>
+      </View>
+    );
+  }
+
   return (
     <Scaffold
       header={
         <Header
-          title="Nome da Lista"
+          title={currentList.listName}
           showBackButton
           navigation={navigation}
           rightActions={[
@@ -146,7 +221,7 @@ export default function ProductListScreen() {
               fontSize={FontSizes.sm}
               backwardsColor="primaryContainer"
             >
-              {products.length}
+              {currentList.items.length}
             </ThemedText>
             <ThemedText fontSize={FontSizes.sm}>{`produtos`}</ThemedText>
           </View>
@@ -159,7 +234,16 @@ export default function ProductListScreen() {
             </ThemedText>
             <ThemedText fontSize={FontSizes.sm}>{`Itens no total`}</ThemedText>
           </View>
-          <Button title="Novo Item" icon="add" />
+          <View style={styles.listHeadLine}>
+            <ThemedText
+              fontSize={FontSizes.sm}
+              backwardsColor="tertiaryContainer"
+            >
+              {totalZerosCount}
+            </ThemedText>
+            <ThemedText fontSize={FontSizes.sm}>{`Itens zerados`}</ThemedText>
+          </View>
+          <Button title="Cadastrar Item" icon="add" iconPosition="right" />
         </View>
         <View style={{ position: "absolute", right: 0, bottom: 0 }}>
           <ListIconComponent />
@@ -203,22 +287,22 @@ export default function ProductListScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={true}
       >
-        {products.map((product) => (
-          <ProductItemCard
-            tagText={product.tagText}
-            tagRainbowColor={product.tagColor}
-            key={product.id}
-            isEditing={editingProductId === product.id}
-            onToggleEditing={() => toggleEditing(product.id)}
-            onEdit={() => handleEdit(product.id)}
-            onDelete={() => handleDelete(product.id)}
-            id={product.id}
-            name={product.name}
-            quantity={product.quantity}
-            value={product.count}
-            showAdd={!autoAdd}
-          />
-        ))}
+        {currentList.items.map((product) => {
+          const isInItemsToBuy = currentList.itemsToBuy.some(
+            (item) => item.id === product.id
+          );
+          return (
+            <Card
+              key={product.id}
+              product={product}
+              isEditing={selectedProducts.includes(product.id)} // Passa o estado de edição/seleção
+              onRemove={handleDelete} // Implemente a lógica de remoção
+              onEdit={handleEdit} // Implemente a lógica de edição
+              onToggleEditing={toggleProductSelection} // Alterna a seleção do produto
+              isInItemsToBuy={isInItemsToBuy} // Passa se o item está em itemsToBuy
+            />
+          );
+        })}
       </ScrollView>
 
       {/* Modal de Informações */}
@@ -261,5 +345,13 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingHorizontal: PaddingMargin.md,
     paddingBottom: 50,
+    gap: SpaceGaps.md,
+  },
+  confirmAllButtonContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 20,
+    right: 20,
+    alignItems: "center",
   },
 });

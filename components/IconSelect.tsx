@@ -13,7 +13,7 @@ import { ThemedText } from "./widgets/ThemedText";
 import Divider from "./widgets/Divider";
 import { Texts } from "./widgets/Texts";
 import { MaterialIcons } from "@expo/vector-icons";
-import Button from "./widgets/Button";
+import { Button } from "./widgets/Button";
 
 interface IconSelectProps {
   onSelect: (category: keyof typeof GroceriesIconSet) => void; // Função chamada quando um ícone é selecionado
@@ -52,6 +52,21 @@ const IconSelect: React.FC<IconSelectProps> = ({ onSelect }) => {
     setIsOpen(!isOpen); // Alterna entre abrir e fechar
   };
 
+  const focusedBackgroundColor = useThemeColor({}, "secondaryContainer");
+  const focusedTextColor = useThemeColor({}, "onSecondaryContainer");
+  const hexToRgb = (hex: string) => {
+    // Remove o '#' se presente
+    hex = hex.replace(/^#/, "");
+    // Converte para RGB
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `${r}, ${g}, ${b}`;
+  };
+  const focusedTextColorRgb = hexToRgb(focusedTextColor);
+  const textColorRgb = hexToRgb(textColor);
+
   return (
     <View style={[styles.container]}>
       <Texts.Label style={[{ color: textColor }]}>
@@ -65,7 +80,9 @@ const IconSelect: React.FC<IconSelectProps> = ({ onSelect }) => {
             borderWidth: 0,
             borderColor: borderColor,
           },
-          isOpen && {},
+          isOpen && {
+            backgroundColor: focusedBackgroundColor,
+          },
         ]}
         onPress={toggleItems} // Abre/fecha os itens ao pressionar
       >
@@ -76,7 +93,9 @@ const IconSelect: React.FC<IconSelectProps> = ({ onSelect }) => {
         />
         <ThemedText
           fontSize={FontSizes.sm}
-          style={{ color: selectedOnce ? textColor : borderColor }}
+          style={{
+            color: selectedOnce ? textColor : `rgba(${textColorRgb}, 0.5)`,
+          }}
         >
           {selectedIcon}
         </ThemedText>

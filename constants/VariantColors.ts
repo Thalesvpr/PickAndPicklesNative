@@ -1,3 +1,15 @@
+export const RainbowColor = {
+  red: "red",
+  orange: "orange",
+  yellow: "yellow",
+  green: "green",
+  blue: "blue",
+  indigo: "indigo",
+} as const;
+
+// Defina o tipo correspondente
+export type RainbowBaseColors = keyof typeof RainbowColor;
+
 export const RainbowColors = {
   light: {
     red: {
@@ -76,15 +88,6 @@ export const RainbowColors = {
     },
   },
 };
-
-// Tipos para cores base
-export type RainbowBaseColors =
-  | "red"
-  | "orange"
-  | "yellow"
-  | "green"
-  | "blue"
-  | "indigo";
 
 // Tipos para cores de container
 export type RainbowContainerColors = `${RainbowBaseColors}Container`;

@@ -1,6 +1,6 @@
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useManualTheme } from "@/contexts/ManualThemeContext";
-import { RainbowBaseColors, RainbowColors } from "@/constants/VariantCalors";
+import { RainbowBaseColors, RainbowColors } from "@/constants/VariantColors";
 
 export function useRainbowColor(colorName: RainbowBaseColors) {
   const systemTheme = useColorScheme() ?? "light"; // Tema do sistema

@@ -6,7 +6,7 @@ import { Scaffold } from "@/components/ui/Scaffold";
 import { useNavigation } from "expo-router";
 import TextField from "@/components/widgets/TextField";
 import { ScrollView } from "react-native-gesture-handler";
-import Button from "@/components/widgets/Button";
+import { Button } from "@/components/widgets/Button";
 import IconSelect from "@/components/IconSelect";
 import { GroceriesIconSet } from "@/components/GroceriesIconSet";
 import Divider from "@/components/widgets/Divider";

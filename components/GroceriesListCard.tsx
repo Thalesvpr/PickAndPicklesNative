@@ -1,12 +1,12 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import ListCount from "./widgets/ListCount"; // Importando o componente ListCount
-import Button from "./widgets/Button";
+import { Button } from "./widgets/Button";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { GroceriesIconSet } from "./GroceriesIconSet";
 import { router } from "expo-router";
 import { BorderRadius, SpaceGaps, PaddingMargin } from "@/constants/Theme";
 import { Texts } from "./widgets/Texts";
+import Tag from "./widgets/Tag";
 
 interface GroceriesListCardProps {
   listName: string;
@@ -49,7 +49,7 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
           <Texts.Headline>{listName}</Texts.Headline>
           <Texts.SupportingText>{supportingText}</Texts.SupportingText>
         </View>
-        <ListCount count={itemCount} />
+        <Tag text={itemCount} color="tertiary" />
       </View>
 
       {/* Botão outline com ícone à direita */}
@@ -58,11 +58,12 @@ const GroceriesListCard: React.FC<GroceriesListCardProps> = ({
           icon="file-cabinet"
           iconSource="materialCommunity"
           badge={badgeValue}
+          badgeThemeColor="error"
           iconPosition="right"
-          outline
           title="Ver Estoque"
           onPress={() => handleNavigateToCart(id)}
           disabled={disabled}
+          outline
         />
       </View>
 

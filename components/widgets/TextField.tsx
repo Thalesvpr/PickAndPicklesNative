@@ -34,10 +34,22 @@ const TextField: React.FC<TextFieldProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const characterCount = value.length;
   const textColor = useThemeColor({}, `onSurface`);
-  const outlineColor = useThemeColor({}, `outline`);
   const outlineVariantColor = useThemeColor({}, `outlineVariant`);
   const backgroundColor = useThemeColor({}, "surfaceContainer");
-
+  const focusedBackgroundColor = useThemeColor({}, "secondaryContainer");
+  const focusedTextColor = useThemeColor({}, "onSecondaryContainer");
+  const hexToRgb = (hex: string) => {
+    // Remove o '#' se presente
+    hex = hex.replace(/^#/, "");
+    // Converte para RGB
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `${r}, ${g}, ${b}`;
+  };
+  const focusedTextColorRgb = hexToRgb(focusedTextColor);
+  const textColorRgb = hexToRgb(textColor);
   return (
     <View style={styles.container}>
       {/* Label */}
@@ -50,13 +62,19 @@ const TextField: React.FC<TextFieldProps> = ({
         style={[
           styles.input,
           {
-            borderColor: isFocused ? outlineVariantColor : "transparent",
-            color: textColor,
-            backgroundColor: backgroundColor,
+            borderColor: "transparent", //outlineVariantColor,
+            color: isFocused ? focusedTextColor : textColor,
+            backgroundColor: isFocused
+              ? focusedBackgroundColor
+              : backgroundColor,
           },
         ]}
         placeholder={placeholder}
-        placeholderTextColor={outlineVariantColor}
+        placeholderTextColor={
+          isFocused
+            ? `rgba(${focusedTextColorRgb}, 0.5)`
+            : `rgba(${textColorRgb}, 0.5)`
+        }
         value={value}
         onChangeText={onChangeText}
         maxLength={maxLength}

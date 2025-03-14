@@ -17,7 +17,8 @@ import { ManualThemeProvider } from "@/contexts/ManualThemeContext";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { Colors } from "@/constants/Colors";
 import { Header } from "@/components/ui/Header";
-import Button from "@/components/widgets/Button";
+import { Button } from "@/components/widgets/Button";
+import { GroceriesProvider } from "@/contexts/GroceriesContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,30 +43,36 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ManualThemeProvider>
-        <ThemeProvider value={isDarkTheme ? DarkTheme : DefaultTheme}>
-          <Stack>
-            {/* Tela inicial (tabs) */}
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <GroceriesProvider>
+        <ManualThemeProvider>
+          <ThemeProvider value={isDarkTheme ? DarkTheme : DefaultTheme}>
+            <Stack>
+              {/* Tela inicial (tabs) */}
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-            {/* Tela do Carrinho */}
-            <Stack.Screen name="cart" options={{ headerShown: false }} />
-            {/* Tela de New Groceries List */}
-            <Stack.Screen
-              name="new-groceries-list"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="grocery-list"
-              options={{ headerShown: false }}
-            />
+              {/* Tela do Carrinho */}
+              <Stack.Screen name="cart" options={{ headerShown: false }} />
+              {/* Tela de New Groceries List */}
+              <Stack.Screen
+                name="new-groceries-list"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="grocery-list"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="shopping" options={{ headerShown: false }} />
 
-            {/* Tela de "Não Encontrado" */}
-            <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-          </Stack>
-          <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-        </ThemeProvider>
-      </ManualThemeProvider>
+              {/* Tela de "Não Encontrado" */}
+              <Stack.Screen
+                name="+not-found"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+            <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+          </ThemeProvider>
+        </ManualThemeProvider>
+      </GroceriesProvider>
     </GestureHandlerRootView>
   );
 }

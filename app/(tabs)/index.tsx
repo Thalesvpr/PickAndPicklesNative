@@ -9,34 +9,25 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { Switch } from "@/components/widgets/Switch";
 import { useManualTheme } from "@/contexts/ManualThemeContext";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import GroceriesListCard from "@/components/GroceriesListCard";
 import Divider from "@/components/widgets/Divider";
-import { GroceriesIconSet } from "@/components/GroceriesIconSet";
-import { groceriesListsDataSet } from "@/constants/dataset";
 import { Scaffold } from "@/components/ui/Scaffold";
 import { Header } from "@/components/ui/Header";
 import { useNavigation } from "@react-navigation/native";
-import Button from "@/components/widgets/Button";
+import { Button } from "@/components/widgets/Button";
 import VerticalButton from "@/components/widgets/VerticalButton";
 import Badge from "@/components/widgets/Badge";
 import { SpaceGaps, PaddingMargin } from "@/constants/Theme";
 import { router } from "expo-router";
-
-interface GList {
-  id: number;
-  listName: string;
-  icon: keyof typeof GroceriesIconSet;
-  items: any[]; // Assuming items is an array of any type
-  supportingText: string;
-}
-
-const groceriesLists = groceriesListsDataSet;
+import { GroceryList, useGroceries } from "@/contexts/GroceriesContext"; // Importe o hook useGroceries
+import ColorBar from "@/components/widgets/ColorBar";
+import InputBar from "@/components/widgets/InputBar";
 
 export default function HomeScreen() {
   const { manualTheme, setManualTheme } = useManualTheme();
   const [isSwitchOn, setIsSwitchOn] = useState(manualTheme !== "dark");
   const navigation = useNavigation();
+  const { groceriesLists } = useGroceries(); // Use o hook useGroceries
 
   const handleSwitchToggle = (value: boolean) => {
     const newTheme = value ? "dark" : "light";
@@ -46,11 +37,20 @@ export default function HomeScreen() {
   };
 
   const handleShoppingPress = () => {
-    console.log("Compras pressionado");
+    router.push("/shopping");
   };
 
   const handleAddPress = () => {
     router.push("/new-groceries-list");
+  };
+
+  // Função para calcular o badgeValue
+  const calculateBadgeValue = (list: GroceryList): number => {
+    const itemsWithZeroVolume = list.items.filter((item) => item.volumes === 0);
+    const itemsNotInItemsToBuy = itemsWithZeroVolume.filter(
+      (item) => !list.itemsToBuy.some((i) => i.id === item.id)
+    );
+    return itemsNotInItemsToBuy.length;
   };
 
   return (
@@ -77,7 +77,8 @@ export default function HomeScreen() {
     >
       <View style={styles.container}>
         <Button
-          icon="shopping-basket"
+          icon="basket-outline"
+          iconSource="materialCommunity"
           title="Compras"
           themeColor="tertiary"
           onPress={handleShoppingPress}
@@ -85,12 +86,18 @@ export default function HomeScreen() {
         <Button icon="add" onPress={handleAddPress} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* <ColorBar /> */}
+        <InputBar
+          onSearch={function (text: string): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
         {groceriesLists.map((list) => (
           <GroceriesListCard
             id={list.id}
             listName={list.listName}
             icon={list.icon}
-            badgeValue={100}
+            badgeValue={calculateBadgeValue(list)} // Passa o badgeValue calculado
             itemCount={list.items.length}
             supportingText={list.supportingText}
             onAddItem={() => console.log(list.listName)}

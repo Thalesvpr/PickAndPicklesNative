@@ -23,7 +23,6 @@ import {
   PaddingMargin,
 } from "@/constants/Theme";
 import { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
-import ListCount from "./ListCount";
 
 interface VerticalButtonProps {
   title?: string;
@@ -80,7 +79,7 @@ const VerticalButton: React.FC<VerticalButtonProps> = ({
             size={20}
             color={selected ? iconColor : selectedIconColor}
           />
-          {badge && <ListCount count={badge} />}
+          {badge && <Badge value={badge} />}
         </View>
       </View>
 

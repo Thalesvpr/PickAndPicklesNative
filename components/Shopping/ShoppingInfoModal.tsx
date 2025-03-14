@@ -8,14 +8,14 @@ import StepActions from "./StepActions";
 import StepTagCount from "./StepTagCount";
 import StepNameQuantity from "./StepNameQuantity";
 
-interface GroceryListInfoModalProps {
+interface ShoppingInfoModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
 const staps = [];
 
-const GroceryListInfoModal: React.FC<GroceryListInfoModalProps> = ({
+const ShoppingInfoModal: React.FC<ShoppingInfoModalProps> = ({
   visible,
   onClose,
 }) => {
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GroceryListInfoModal;
+export default ShoppingInfoModal;

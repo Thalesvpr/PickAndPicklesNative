@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Scaffold } from "@/components/ui/Scaffold";
 import { Header } from "@/components/ui/Header";
-import Button from "@/components/widgets/Button";
+import { Button } from "@/components/widgets/Button";
 
 const ListScreen = () => {
   const navigation = useNavigation();
